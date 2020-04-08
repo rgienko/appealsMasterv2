@@ -77,8 +77,15 @@ WSGI_APPLICATION = 'appealsMasterv2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': '',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'appealsDB',
+        'USER': 'randall.gienko',
+        'PASSWORD': 'R@nd@ll22',
+        'HOST': 'appeals.database.windows.net',
+        'PORT':'',
+        'OPTIONS': {
+                'driver': 'ODBC Driver 13 for SQL Server',
+        }
     }
 }
 
@@ -119,4 +126,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'app/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
