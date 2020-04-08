@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - My Django Application</title>
+    {% load humanize %}
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+</head>
+
+<body>
+    <div class="vertical-nav">
+        <div class="py-4 px-3 mb-4 ">
+            <div class="media d-flex align-items-center">
+                <!--<img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">-->
+                <div class="media-body text-white">
+                    {% if user.is_authenticated %}
+                        <h4 class="m-0">Welcome, {{ user.get_username}}</h4>
+                    {% else %}
+                        <h4 class="m-0" href = "{% url 'login' %}">Login</h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <p class="text-white font-weight-bold text-uppercase px-3 small pb-4 mb-0">Main</p>
+
+        <ul class="nav flex-column mb-0">
+            <li class="nav-item"><a class="nav-link text-white font-italic" href="{% url 'newAppeal' %}" targe="_blank">New Appeal</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-italic" href="#">Add Client</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-italic" href="#">Add Service</a></li>
+        </ul>
+    </div>
+    <div class="page-content mb-5">
+          <div class="navbar navbar-dark w-100">
+              <div class="search-bar w-50">
+                <form method='POST' action="">
+                  {% csrf_token %}
+                  <input class="form-control w-100" type="text" placeholder="Search Case" aria-label="Search" name="search">
+                </form>
+              </div>
+
+          </div>
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+</body>
+</html>
