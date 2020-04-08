@@ -23,13 +23,7 @@
         <div class="py-4 px-3 mb-4 ">
             <div class="media d-flex align-items-center">
                 <!--<img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">-->
-                <div class="media-body text-white">
-                    {% if user.is_authenticated %}
-                        <h4 class="m-0">Welcome, {{ user.get_username}}</h4>
-                    {% else %}
-                        <h4 class="m-0" href = "{% url 'login' %}">Login</h4>
-                    {% endif %}
-                </div>
+                
             </div>
         </div>
 

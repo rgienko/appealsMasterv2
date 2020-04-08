@@ -1,0 +1,65 @@
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+
+
+.appeal-information {
+  width:50rem
+}
+
+.appeal-information-issues {
+
+}
+
+.vertical-nav {
+  width: 17rem;
+  min-width: 17rem;
+  height: 100vh;
+  background-color: #465765;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s;
+}
+
+.page-content {
+  width: calc(100% - 17rem);
+  margin-left: 17rem;
+  transition: all 0.4s;
+}
+
+.search-bar {
+  margin-left:auto;
+  margin-right:auto;
+  color: WHITE;
+
+}
+
+.navbar, .form-control {
+  background-color: #465765;
+  color:WHITE
+  padding: 1rem 1rem;
+  border-width: 0;
+  border-radius: 0;
+}
+
+.form-control {
+  border: 1px solid white;
+      color: WHITE;
+}
+
+
+.form-control::-webkit-input-placeholder{
+  color:white
+}
+
+.form-control:focus {
+    color: WHITE;
+    border: 1px solid white;
+    background-color: #465765;
+}
