@@ -21,10 +21,23 @@
 <body>
     <div class="vertical-nav">
         <div class="py-4 px-3 mb-4 ">
+            {% if user.is_authenticated %}
             <div class="media d-flex align-items-center">
-                <!--<img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">-->
-
+                <img src="{{ user.avatar }}" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+                <div class="media-body text-white">
+                    <h4 class="m-0">Welcome, {{ user.name }}</h4>
+                    <h4 class="m-0 text-muted">{{ user.email}}></h4>
+                    <h4 class="m-0"><a class="nav-link" href="{% url 'signout' %}">Sign Our</a></h4>
+                </div>
             </div>
+            {% else %}
+            <div class="media d-flex align-items-center">
+                <i class="far fa-user-circle fa-lg rounded-circle img-thumbnail">
+                <div class="media-body text-white">
+                    <h4 class="m-0"><a class="nav-link" href="{% url 'signin' %}">Sign In</a></h4>
+                </div>
+            </div>
+            {% endif %}
         </div>
 
         <p class="text-white font-weight-bold text-uppercase px-3 small pb-4 mb-0">Main</p>
