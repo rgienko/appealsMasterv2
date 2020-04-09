@@ -15,8 +15,8 @@ def get_calendar_events(token):
     # Configure query parameters #
     # modify the results
     query_params = {
-        '$select': 'subject, orgranizer, start, end',
-        '$orderby': 'createdDateTime DESC',
+        '$select': 'subject, organizer, start, end',
+        '$orderby': 'createdDateTime DESC'
     }
 
     # send Get to /me/events

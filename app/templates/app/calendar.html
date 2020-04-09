@@ -15,10 +15,10 @@
             {% if events %}
                 {% for event in events %}
                     <tr>
-                        <td>{{ event.orgranizer.emailAddress.name }}</td>
+                        <td>{{ event.organizer.emailAddress.name }}</td>
                         <td>{{ event.subject }}</td>
-                        <td>{{ event.start.dateTime|date: "SHORT_DATETIME_FORMAT" }}</td>
-                        <td>{{ event.end.dateTime|date: "SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{{ event.start.dateTime }}</td>
+                        <td>{{ event.end.dateTime }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}

@@ -10,7 +10,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 # This is necessary because Azure does not garuntee
 # to return scopes in the same case and order as requested
-os.environ['OAUTHLIB_RELAX_TOKEN'] = '1'
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 os.environ['OAUTHLIB_IGNORE_SCOPE_CHANGE'] = '1'
 
 # Load the oauth_settings.yml file
@@ -24,7 +24,7 @@ def get_sign_in_url():
     # initialize the OAuth Client
     aad_auth = OAuth2Session(settings['app_id'],
                     scope=settings['scopes'],
-                    redirect=settings['redirect'])
+                    redirect_uri=settings['redirect'])
 
     sign_in_url, state = aad_auth.authorization_url(authorize_url, prompt='login')
 
@@ -35,7 +35,7 @@ def get_token_from_code(callback_url, expected_state):
     # initialize the OAuth Client
     aad_auth = OAuth2Session(settings['app_id'],
                     scope=settings['scopes'],
-                    redirect=settings['redirect'])
+                    redirect_uri=settings['redirect'])
 
     token = aad_auth.fetch_token(token_url,
                     client_secret=settings['app_secret'],
@@ -64,7 +64,7 @@ def get_token(request):
             # refresh token_endpoin
             aad_auth = OAuth2Session(settings['app_id'],
                             scope=settings['scopes'],
-                            redirect=settings['redirect'])
+                            redirect_uri=settings['redirect'])
 
             refresh_params = {
                 'client_id': settings['app_id'],

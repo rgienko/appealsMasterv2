@@ -33,7 +33,7 @@ def sign_in(request):
     # Get the sign in url
     sign_in_url, state = get_sign_in_url()
     # Save the expected state so we can validate in the callback
-    request.session['auth_helper'] = state
+    request.session['auth_state'] = state
     # Redirect to the Azure sign-in page
     return HttpResponseRedirect(sign_in_url)
 
@@ -66,14 +66,14 @@ def calendar(request):
 
     if events:
         for event in events['value']:
-            event['start']['dateTime'] = dateutil.parser(event['start']['dateTime'])
-            event['end']['dateTime'] = dateutil.parser(event['end']['dateTime'])
+            event['start']['dateTime'] = dateutil.parser.parse(event['start']['dateTime'])
+            event['end']['dateTime'] = dateutil.parser.parse(event['end']['dateTime'])
 
         context['events'] = events['value']
 
-    return render(request, 'app/calendar.html')
+    return render(request, 'app/calendar.html', context)
 
-def CalendarFormView(TemplateView):
+class CalendarFormView(TemplateView):
     template_name=""
 
     def get(self, request, **kwargs):
