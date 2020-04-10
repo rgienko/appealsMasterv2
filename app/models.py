@@ -49,6 +49,10 @@ class issue_master(models.Model):
     def __str__(self):
         return '{0} - {1}'.format(str(self.issue_id), self.issue)
 
+class state_name_master(models.Model):
+    state_id = models.CharField(primary_key=True, max_length=2)
+    state_name = models.CharField(max_length=25, blank=True, null=True)
+
 class parent_master(models.Model):
     parent_id = models.CharField(primary_key=True, max_length=255)
     parent_full_name = models.CharField(max_length=255, blank=True, null=True)
@@ -56,7 +60,7 @@ class parent_master(models.Model):
     corp_contact_last_name = models.CharField(max_length=255, blank=True, null=True)
     corp_contact_street = models.CharField(max_length=255, blank=True, null=True)
     corp_contact_city = models.CharField(max_length=255, blank=True, null=True)
-    corp_contact_state = models.CharField(max_length=255, blank=True, null=True)
+    corp_contact_state_id = models.ForeignKey(state_name_master, on_delete = models.CASCADE)
     corp_contact_zip = models.CharField(max_length=255, blank=True, null=True)
     corp_contact_phone = models.CharField(max_length=255, blank=True, null=True)
     corp_contact_fax = models.CharField(max_length=255, blank=True, null=True)
@@ -118,9 +122,7 @@ class srg_staff_master(models.Model):
         return(str(self.sri_staff_id))
 
 
-class state_name_master(models.Model):
-    state_id = models.CharField(primary_key=True, max_length=2)
-    state_name = models.CharField(max_length=25, blank=True, null=True)
+
 
 class status_master(models.Model):
     status_id = models.IntegerField(primary_key=True)
@@ -191,16 +193,15 @@ class provider_master(models.Model):
     npr_date = models.DateField(blank=True, null=True)
     receipt_date = models.DateTimeField(blank=True, null=True) # Remove field, already in AppealMaster
     was_added = models.BooleanField(blank=True, null=True)
-    issue_id = models.ForeignKey(issue_mater, on_delete=models.CASCADE)  # FK
+    issue_id = models.ForeignKey(issue_master, on_delete=models.CASCADE)  # FK
     charge_id = models.ForeignKey(charge_master,on_delete=models.CASCADE) # FK
-    audit_adjustments = models.CharField(max_length=255, blank=True, null=True)
     amount = models.DecimalField(decimal_places = 2, max_digits = 16, blank=True, null=True)
+    audit_adjustments = models.CharField(max_length=255, blank=True, null=True)
     realization_weight = models.FloatField(blank=True, null=True)
     sri_staff_id = models.ForeignKey(srg_staff_master, on_delete=models.CASCADE) # FK
     hospcontactid = models.IntegerField(blank=True, null=True) # FK?
     active_in_appeal_field = models.BooleanField(blank=True, null=True, default=True)
     to = models.CharField(max_length=7, blank=True, null=True)
-    to_case_number = models.ForeignKey(appeal_master.case_number, on_delete=models.CASCADE)
     to_date = models.DateField(blank=True, null=True)
     transmactrack = models.CharField(max_length=255, blank=True, null=True)
     from_field = models.CharField(max_length=7, blank=True, null=True)
@@ -210,3 +211,4 @@ class provider_master(models.Model):
 
 class case_master(models.Model):
     case_number = models.ForeignKey(appeal_master, on_delete=models.CASCADE)
+    provider_master_id = models.ForeignKey(provider_master, on_delete=models.CASCADE)
