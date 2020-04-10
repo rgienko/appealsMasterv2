@@ -6,6 +6,7 @@
     <title>{{ title }} - My Django Application</title>
     {% load humanize %}
     {% load staticfiles %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -20,27 +21,26 @@
 
 <body>
     <div class="vertical-nav">
-        <div class="py-4 px-3 mb-4 ">
+        <div class="py-4 px-3 mb-4">
             {% if user.is_authenticated %}
             <div class="media d-flex align-items-center">
                     {% if user.avatar %}
                         <img src="{{ user.avatar }}" class=" rounded-circle align-self-center mr-2" width="32px">
                     {% else %}
-                        <i class="material-icons" width="32px">account_circle</i>
+                        <i class="far fa-user-circle fa-3x"></i>
                     {% endif %}
-
-                    <div class="media-body text-white">
-                        <h5 class="dropdown-item-text mb-0"> {{ user.name }}</h5>
-                        <p class="dropdown-item-text text-muted mb-0">{{ user.email}}</p>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item-text mb-0 text-white" href="{% url 'signout' %}">Sign Out</a>
-                    </div>
-
             </div>
+            <div class="media-body text-white">
+                <h5 class="mb-0"> {{ user.name }}</h5>
+                <p class="text-muted mb-0">{{ user.email}}</p>
+                <a class="mb-0 text-white" href="{% url 'signout' %}">Sign Out</a>
+            </div>
+
+
             {% else %}
             <div class="media d-flex align-items-center">
                 <div class="media-body text-white">
-                    <h4 class="m-0"><a class="nav-link" href="{% url 'signin' %}">Sign In</a></h4>
+                    <a class="mb-0 text-white" href="{% url 'signin' %}">Sign In</a>
                 </div>
             </div>
             {% endif %}
