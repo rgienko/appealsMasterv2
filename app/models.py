@@ -42,8 +42,8 @@ class issue_master(models.Model):
     rep_id = models.IntegerField()
     category_id = models.IntegerField()
     abbreviation = models.CharField(max_length=255, blank=True, null=True)
-    short_description = models.TextField(blank=True, null=True)
-    long_description = models.TextField(blank=True, null=True)
+    short_description = models.TextField(max_length=1500,blank=True, null=True)
+    long_description = models.TextField(max_length=1500, blank=True, null=True)
     is_groupable = models.BooleanField()
 
     def __str__(self):
@@ -120,9 +120,6 @@ class srg_staff_master(models.Model):
 
     def __str__(self):
         return(str(self.sri_staff_id))
-
-
-
 
 class status_master(models.Model):
     status_id = models.IntegerField(primary_key=True)
