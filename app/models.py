@@ -72,7 +72,7 @@ class parent_master(models.Model):
 class prov_name_master(models.Model):
     provider_number = models.CharField(primary_key=True, max_length=7, verbose_name="Proivider Number")
     provider_name = models.CharField(max_length=255, blank=True, null=True)
-    fye = models.CharField(max_length=5, blank=True, null=True)
+    fye = models.CharField(max_length=10, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
     county = models.CharField(max_length=255, blank=True, null=True)
     state_id = models.ForeignKey(state_name_master, on_delete = models.CASCADE, verbose_name="State") # FK
