@@ -152,7 +152,7 @@ class appeal_master(models.Model): # my person model related to example
 
 
 class provider_master(models.Model):
-    id = models.UUIDField(primary_key=True, default = uuid.uuid4())
+    id = models.UUIDField(primary_key=True, default = uuid.uuid4)
     case_number = models.ManyToManyField(appeal_master, through='case_master')
     provider_number = models.ManyToManyField(prov_name_master, through="case_master") #FK
     """
