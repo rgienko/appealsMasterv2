@@ -150,42 +150,12 @@ class appeal_master(models.Model): # my person model related to example
     request_date = models.DateTimeField(blank=True, null=True)
     acknowledged = models.BooleanField()
 
-    def __str__(self):
-        return (self.case_number)
-
-    def get_rep(self):
-        return (self.rep_id.rep)
-
-    def get_prrb(self):
-        return (self.prrb_contact_id.last_name)
-
-    def get_status(self):
-        return(self.status_id.status)
-
-    def is_individual(self):
-        return (self.structure in {self.INDIVIDUAL})
-
-    def is_group(self):
-        return (self.structure in {self.CIRP, self.OPTIONAL})
-
-    def is_cirp_group(self):
-        return (self.structure in {self.CIRP})
-
-    def is_opt_group(self):
-        return (self.structure in {self.OPTIONAL})
-
-    def is_ack(self):
-        return (self.acknowledged)
-
-    def get_fi(self):
-        return (self.fi_id.fi_name)
-
-
 
 class provider_master(models.Model):
     id = models.UUIDField(primary_key=True, default = uuid.uuid4())
     case_number = models.ManyToManyField(appeal_master, through='case_master')
-    provider_number = models.ForeignKey(prov_name_master, on_delete=models.CASCADE) #FK
+    provider_number = models.ManyToManyField(prov_name_master, through="case_master") #FK
+    """
     fiscal_year = models.IntegerField(blank=True, null=True)
     npr_date = models.DateField(blank=True, null=True)
     receipt_date = models.DateTimeField(blank=True, null=True) # Remove field, already in AppealMaster
@@ -205,7 +175,8 @@ class provider_master(models.Model):
     agreement = models.CharField(max_length=255, blank=True, null=True)
     agree_note = models.TextField(blank=True, null=True)
     provider_specific_note = models.TextField(blank=True, null=True)
-
+    """
 class case_master(models.Model):
     case_number = models.ForeignKey(appeal_master, on_delete=models.CASCADE)
     provider_master_id = models.ForeignKey(provider_master, on_delete=models.CASCADE)
+    provider_number = models.ForeignKey(prov_name_master, on_delete = models.CASCADE, default="00-0000")
