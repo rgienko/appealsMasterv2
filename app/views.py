@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from app.auth_helper import get_sign_in_url, get_token_from_code, store_token, store_user, remove_user_and_token, get_token
@@ -73,18 +73,32 @@ def calendar(request):
 
     return render(request, 'app/calendar.html', context)
 
-class CalendarFormView(TemplateView):
+def new_appeal(request):
+    context = initialize_context(request)
+    form = new_appeal_master_form(request.POST)
+    context['form'] = form
+    token = get_token(request)
+    if request.method == 'POST':
+        if form.is_valid():
+            new_appeal_master_case = form.save(commit=False)
+            new_appeal_master_case.save()
+
+            return redirect(request, 'home', context=context)
+    return render(request, 'app/new_appeal_master.html', context=context)
+
+"""
+class new_due_date(TemplateView):
     template_name=""
 
     def get(self, request, **kwargs):
         context = initialize_context(request)
-        form = CalendarEventForm()
+        form = new_appeal_master_form()
         context['form'] = form
         return render(request, template_name, context)
 
     def post(self, request):
         context = initialize_context(request)
-        form = CalendarEventForm(request.POST)
+        form = new_appeal_master_form(request.POST)
         context['form'] = form
         token = get_token(request)
 
@@ -115,3 +129,4 @@ class CalendarFormView(TemplateView):
 
             return render(request, template_name, context=context)
         return render(request, "app/event-form.html", context=context)
+"""

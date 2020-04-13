@@ -16,13 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .  import views
-from .views import CalendarFormView
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('signin', views.sign_in, name='signin'),
     path('signout', views.sign_out, name='signout'),
     path('callback', views.callback, name='callback'),
+    path('newAppeal', views.new_appeal, name='new_appeal_master' ),
     path(r'calendar/', views.calendar, name='calendar'),
-    path(r'calendar/event', CalendarFormView.as_view(), name='newEvent' )
 ]
