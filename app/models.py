@@ -143,40 +143,30 @@ class appeal_master(models.Model): # my person model related to example
         ]
     structure = models.CharField(max_length=10, choices = structure_choices)
     general_info_and_notes = models.TextField(blank=True, null=True)
-    stamp = models.DateTimeField(blank=True, null=True)
     prrb_trk_num = models.CharField(max_length=255, blank=True, null=True)
     mac_trk_num = models.CharField(max_length=255, blank=True, null=True)
-    create_date = models.DateTimeField(blank=True, null=True)
-    request_date = models.DateTimeField(blank=True, null=True)
-    acknowledged = models.BooleanField()
+    create_date = models.DateTimeField(blank=True, null=True) # Date of Acknowledgement
+    request_date = models.DateTimeField(blank=True, null=True) # Submission Date
+    acknowledged = models.BooleanField(blank=True, null=True, default=False) # will update the create_date
 
 
 class provider_master(models.Model):
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
-    case_number = models.ManyToManyField(appeal_master, through='case_master')
-    provider_number = models.ManyToManyField(prov_name_master, through="case_master") #FK
-    """
+    case_number = models.ForeignKey(appeal_master, on_delete=models.CASCADE, default="00-0000")
+    provider_number = models.ForeignKey(prov_name_master, on_delete=models.CASCADE, default="01-0001") #FK
     fiscal_year = models.IntegerField(blank=True, null=True)
     npr_date = models.DateField(blank=True, null=True)
-    receipt_date = models.DateTimeField(blank=True, null=True) # Remove field, already in AppealMaster
-    was_added = models.BooleanField(blank=True, null=True)
-    issue_id = models.ForeignKey(issue_master, on_delete=models.CASCADE)  # FK
-    charge_id = models.ForeignKey(charge_master,on_delete=models.CASCADE) # FK
+    receipt_date = models.DateField(blank=True, null=True) # Create Date
+    was_added = models.BooleanField(blank=True, null=True, default=False)
+    issue_id = models.ForeignKey(issue_master, on_delete=models.CASCADE, default=1)  # FK
+    charge_id = models.ForeignKey(charge_master,on_delete=models.CASCADE, default=800) # FK
     amount = models.DecimalField(decimal_places = 2, max_digits = 16, blank=True, null=True)
     audit_adjustments = models.CharField(max_length=255, blank=True, null=True)
-    realization_weight = models.FloatField(blank=True, null=True)
-    sri_staff_id = models.ForeignKey(srg_staff_master, on_delete=models.CASCADE) # FK
-    hospcontactid = models.IntegerField(blank=True, null=True) # FK?
+    sri_staff_id = models.ForeignKey(srg_staff_master, on_delete=models.CASCADE, default=14) # FK
     active_in_appeal_field = models.BooleanField(blank=True, null=True, default=True)
     to = models.CharField(max_length=7, blank=True, null=True)
     to_date = models.DateField(blank=True, null=True)
-    transmactrack = models.CharField(max_length=255, blank=True, null=True)
     from_field = models.CharField(max_length=7, blank=True, null=True)
     agreement = models.CharField(max_length=255, blank=True, null=True)
     agree_note = models.TextField(blank=True, null=True)
     provider_specific_note = models.TextField(blank=True, null=True)
-    """
-class case_master(models.Model):
-    case_number = models.ForeignKey(appeal_master, on_delete=models.CASCADE)
-    provider_master_id = models.ForeignKey(provider_master, on_delete=models.CASCADE)
-    provider_number = models.ForeignKey(prov_name_master, on_delete = models.CASCADE, default="00-0000")
