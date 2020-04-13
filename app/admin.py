@@ -7,7 +7,9 @@ from .models import *
 class action_master_admin(admin.ModelAdmin):
     list_display = ('id', 'note', 'description', 'lead_time', 'type')
 
-admin.site.register(provider_master)
+@admin.register(provider_master)
+class action_master_damin(admin.ModelAdmin):
+    list_display = ('case_number', 'provider_number','fiscal_year', 'npr_date')
 
 @admin.register(appeal_master)
 class appeal_master_admin(admin.ModelAdmin):
