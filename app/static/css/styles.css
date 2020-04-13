@@ -19,7 +19,7 @@
   width: 17rem;
   min-width: 17rem;
   height: 100vh;
-  background-color: #465765;
+  background-color: #DFE3EE;
   position: fixed;
   top: 0;
   left: 0;
@@ -41,7 +41,7 @@
 }
 
 .navbar, .form-control {
-  background-color: #465765;
+  background-color: #3b5998;
   color:WHITE
   padding: 1rem 1rem;
   border-width: 0;
@@ -61,5 +61,5 @@
 .form-control:focus {
     color: WHITE;
     border: 1px solid white;
-    background-color: #465765;
+    background-color: #3b5998;
 }

@@ -22,40 +22,47 @@
 <body>
     <div class="vertical-nav">
         <div class="py-4 px-3 mb-4">
-            {% if user.is_authenticated %}
-            <div class="media d-flex align-items-center">
-                    {% if user.avatar %}
-                        <img src="{{ user.avatar }}" class=" rounded-circle align-self-center mr-2" width="32px">
-                    {% else %}
-                        <i class="far fa-user-circle fa-3x"></i>
-                    {% endif %}
-            </div>
-            <div class="media-body text-white">
-                <h5 class="mb-0"> {{ user.name }}</h5>
-                <p class="text-muted mb-0">{{ user.email}}</p>
-                <a class="mb-0 text-white" href="{% url 'signout' %}">Sign Out</a>
-            </div>
-
-
-            {% else %}
-            <div class="media d-flex align-items-center">
-                <div class="media-body text-white">
-                    <a class="mb-0 text-white" href="{% url 'signin' %}">Sign In</a>
+            <div class=row>
+                <div class="col-sm">
+                {% if user.is_authenticated %}
+                    <div class="media d-flex align-items-center">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar }}" class=" rounded-circle align-self-center" width="32px">
+                            {% else %}
+                                <i class="far fa-user-circle fa-4x"></i>
+                            {% endif %}
+                    </div>
                 </div>
+                <div class="col-sm">
+                    <div class="media-body text-dark">
+                        <h5 class="mb-0"> {{ user.name }}</h5>
+                        <p class="text-muted mb-0">{{ user.email}}</p>
+                        <a class="mb-0 text-dark" href="{% url 'signout' %}">Sign Out</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-sm">
+                    <div class="media d-flex align-items-center">
+                        <div class="media-body text-white">
+                            <a class="mb-0 text-dark" href="{% url 'signin' %}">Sign In</a>
+                        </div>
+                    </div>
+                  }
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
 
         <p class="text-white font-weight-bold text-uppercase px-3 small pb-4 mb-0">Main</p>
 
         <ul class="nav flex-column mb-0">
-            <li class="nav-item"><a class="nav-link text-white font-italic" href="{% url 'home' %}">New Appeal</a></li>
-            <li class="nav-item"><a class="nav-link text-white font-italic" href="{% url 'calendar' %}">Calendar</a></li>
-            <li class="nav-item"><a class="nav-link text-white font-italic" href="{% url 'newEvent' %}">New Event</a></li>
+            <li class="nav-item"><a class="nav-link font-italic text-dark" href="{% url 'home' %}">New Appeal</a></li>
+            <li class="nav-item"><a class="nav-link font-italic text-dark" href="{% url 'calendar' %}">Calendar</a></li>
+            <li class="nav-item"><a class="nav-link font-italic text-dark" href="{% url 'newEvent' %}">New Event</a></li>
         </ul>
     </div>
     <div class="page-content mb-5">
-          <div class="navbar navbar-dark w-100">
+          <div class="navbar w-100">
               <div class="search-bar w-50">
                 <form method='POST' action="">
                   {% csrf_token %}
