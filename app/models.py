@@ -170,3 +170,21 @@ class provider_master(models.Model):
     agreement = models.CharField(max_length=255, blank=True, null=True)
     agree_note = models.TextField(blank=True, null=True)
     provider_specific_note = models.TextField(blank=True, null=True)
+
+class critical_dates_master(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    case_number = models.ForeignKey(appeal_master, on_delete=models.CASCADE, default='00-0000')
+    critical_date = models.DateField()
+    action_id = models.ForeignKey(action_master, on_delete=models.CASCADE, blank=True, null=True)
+    # action = models.TextField(blank=True, null=True)
+    response = models.TextField(blank=True, null=True)
+    status = models.BooleanField(blank=True, null=True)
+
+    def __str__(self):
+        return(str(self.case_number))
+
+    def get_action_note(self):
+        return(self.action_id.note)
+
+    def get_action_details(self):
+        return(self.action_id.description)

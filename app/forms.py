@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, Textarea
-from .models import appeal_master
+from .models import appeal_master, critical_dates_master
 
 
 class CalendarEventForm(forms.Form):
@@ -27,3 +27,17 @@ class new_appeal_master_form(ModelForm):
             'appeal_name':_('Appeal Name:'),
             'structure':_('Structure:'),
         }
+
+class acknowledge_case_form(forms.Form):
+    acknowledged_date = forms.DateTimeField()
+
+    def clean_acknowledged_date(self):
+        data = self.cleaned_data['acknowledged_date']
+
+        return data
+
+class add_critical_due_dates_form(ModelForm):
+
+    class Meta:
+        model = critical_dates_master
+        fields = ['case_number','critical_date', 'action_id']

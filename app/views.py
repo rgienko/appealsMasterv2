@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from app.auth_helper import get_sign_in_url, get_token_from_code, store_token, store_user, remove_user_and_token, get_token
@@ -91,7 +91,67 @@ def new_appeal(request):
             return render(request, 'app/index.html', context=context)
     return render(request, 'app/new_appeal_master.html', context=context)
 
-"""
+
+def appeal_details(request, pk):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    case_information = get_ojbect_or_404(appeal_master, pk=pk)
+    case = case_information.case_number
+    case_due_dates = critical_dates_master.objects.filter(case_number__exact=case).order_by('-critical_date')
+    case_issues = provider_master.objects.filter(case_number__exact=case).order_by('issueid')
+    count = case_issues.count()
+
+    if case_information.structure == 'INDIVIDUAL':
+        provider_information = case_issues[:1]
+    else:
+        provider_information = case_issues
+
+    form = acknowledge_case_form(request.POST)
+    due_form = add_critical_due_dates_form(request.POST)
+
+    if request.method == 'POST' and 'dueButton' in request.POST:
+
+        if due_form.is_valid():
+            new_due_date = due_form.save(commit=False)
+            new_due_date.save()
+
+            return redirect(r'appealDetails', case)
+
+        else:
+            due_form = add_critical_due_dates_form(request.POST, {'case_number':case}, initial={'case_number':case})
+
+    elif request.method =='POST' and 'ackButton' in request.POST:
+        if form.is_valid():
+            case_information.create_date = form.cleaned_data['acknowledged_date']
+            case_information.acknowledged = 'True'
+            case_information.save()
+
+            return redirect(r'appealDetails', case)
+        else:
+            proposed_acknowledged_date = datetime.now()
+            form = acknowledge_case_form(initial={'acknowledged_date':proposed_acknowledged_date})
+
+
+    context = {
+            'due_form':due_form,
+            'form':form,
+            'case_information': case_information,
+            'case_due_dates': case_due_dates,
+            'case_issues':case_issues,
+            'provider_information': provider_information,
+            'count':count,
+            'title': 'Appeal Details',
+        }
+    return render(
+        request,
+        'app/appeal_detail.html',
+        context
+        )
+
+
+
+'''
 class new_due_date(TemplateView):
     template_name=""
 
@@ -134,4 +194,4 @@ class new_due_date(TemplateView):
 
             return render(request, template_name, context=context)
         return render(request, "app/event-form.html", context=context)
-"""
+'''
