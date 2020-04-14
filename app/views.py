@@ -128,6 +128,7 @@ def appeal_details(request, pk):
             due_form = add_critical_due_dates_form(request.POST, {'case_number':case}, initial={'case_number':case})
 
     elif request.method =='POST' and 'ackButton' in request.POST:
+
         if form.is_valid():
             case_information.create_date = form.cleaned_data['acknowledged_date']
             case_information.acknowledged = 'True'
@@ -135,8 +136,7 @@ def appeal_details(request, pk):
 
             return redirect(r'appeal_detail_url', case)
         else:
-            proposed_acknowledged_date = datetime.now()
-            form = acknowledge_case_form(initial={'acknowledged_date':proposed_acknowledged_date})
+            form = acknowledge_case_form()
 
 
     context['due_form'] = due_form
@@ -147,7 +147,7 @@ def appeal_details(request, pk):
     context['provider_information'] = provider_information
     context['count'] = count
     context['title'] = 'Appeal Details'
-    
+
     return render(
         request,
         'app/appeal_detail.html',
