@@ -2,7 +2,6 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, Textarea, DateField
 from .models import appeal_master, critical_dates_master
-from .widgets import BootstrapDateTimePickerInput
 
 
 class CalendarEventForm(forms.Form):
@@ -30,10 +29,7 @@ class new_appeal_master_form(ModelForm):
         }
 
 class acknowledge_case_form(forms.Form):
-    acknowledged_date = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M'],
-        widget=BootstrapDateTimePickerInput()
-    )
+    acknowledged_date = forms.DateField()
 
     def clean_acknowledged_date(self):
         data = self.cleaned_data['acknowledged_date']
