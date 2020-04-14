@@ -33,7 +33,6 @@ class acknowledge_case_form(forms.Form):
 
     def clean_acknowledged_date(self):
         data = self.cleaned_data['acknowledged_date']
-
         return data
 
 class add_critical_due_dates_form(ModelForm):

@@ -22,6 +22,7 @@ urlpatterns = [
     path('signin', views.sign_in, name='signin'),
     path('signout', views.sign_out, name='signout'),
     path('callback', views.callback, name='callback'),
-    path('newAppeal', views.new_appeal, name='new_appeal_master' ),
+    path(r'newAppeal/', views.new_appeal, name='new_appeal_master' ),
+    path(r'details/<pk>/', views.appeal_details, name='appeal_detail_url'),
     path(r'calendar/', views.calendar, name='calendar'),
 ]

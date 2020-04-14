@@ -149,6 +149,17 @@ class appeal_master(models.Model): # my person model related to example
     request_date = models.DateField(blank=True, null=True) # Submission Date
     acknowledged = models.BooleanField(blank=True, null=True, default=False) # will update the create_date
 
+    def get_rep(self):
+        return(self.rep_id.rep)
+
+    def get_fi(self):
+        return(self.fi_id.fi_name)
+
+    def get_prrb(self):
+        return(self.prrb_contact_id.last_name)
+
+    def get_status(self):
+        return(self.status_id.status)
 
 class provider_master(models.Model):
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
@@ -170,6 +181,13 @@ class provider_master(models.Model):
     agreement = models.CharField(max_length=255, blank=True, null=True)
     agree_note = models.TextField(blank=True, null=True)
     provider_specific_note = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return(self.case_number)
+
+    def get_issue_name(self):
+        return(self.issue_id.issue)
+
 
 class critical_dates_master(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)

@@ -5,6 +5,7 @@ from app.auth_helper import get_sign_in_url, get_token_from_code, store_token, s
 from app.graph_helper import get_user, get_calendar_events, create_event
 import dateutil.parser
 from app.forms import *
+from app.models import *
 from django.views.generic import TemplateView
 import datetime
 from datetime import datetime
@@ -29,6 +30,11 @@ def initialize_context(request):
 
 def home(request):
     context = initialize_context(request)
+
+    if request.method =='POST':
+        search_case = request.POST.get('search')
+
+        return redirect(r'appeal_detail_url', search_case)
 
     return render(request, 'app/index.html', context)
 
@@ -96,10 +102,10 @@ def appeal_details(request, pk):
     context = initialize_context(request)
     token = get_token(request)
 
-    case_information = get_ojbect_or_404(appeal_master, pk=pk)
+    case_information = get_object_or_404(appeal_master, pk=pk)
     case = case_information.case_number
     case_due_dates = critical_dates_master.objects.filter(case_number__exact=case).order_by('-critical_date')
-    case_issues = provider_master.objects.filter(case_number__exact=case).order_by('issueid')
+    case_issues = provider_master.objects.filter(case_number__exact=case).order_by('issue_id')
     count = case_issues.count()
 
     if case_information.structure == 'INDIVIDUAL':
@@ -116,7 +122,7 @@ def appeal_details(request, pk):
             new_due_date = due_form.save(commit=False)
             new_due_date.save()
 
-            return redirect(r'appealDetails', case)
+            return redirect(r'appeal_detail_url', case)
 
         else:
             due_form = add_critical_due_dates_form(request.POST, {'case_number':case}, initial={'case_number':case})
@@ -127,22 +133,21 @@ def appeal_details(request, pk):
             case_information.acknowledged = 'True'
             case_information.save()
 
-            return redirect(r'appealDetails', case)
+            return redirect(r'appeal_detail_url', case)
         else:
             proposed_acknowledged_date = datetime.now()
             form = acknowledge_case_form(initial={'acknowledged_date':proposed_acknowledged_date})
 
 
-    context = {
-            'due_form':due_form,
-            'form':form,
-            'case_information': case_information,
-            'case_due_dates': case_due_dates,
-            'case_issues':case_issues,
-            'provider_information': provider_information,
-            'count':count,
-            'title': 'Appeal Details',
-        }
+    context['due_form'] = due_form
+    context['form'] = form
+    context['case_information'] = case_information
+    context['case_due_dates'] = case_due_dates
+    context['case_issues'] = case_issues
+    context['provider_information'] = provider_information
+    context['count'] = count
+    context['title'] = 'Appeal Details'
+    
     return render(
         request,
         'app/appeal_detail.html',

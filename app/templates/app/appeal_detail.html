@@ -18,28 +18,28 @@
                           <li class="list-group-item p-0 border-0">
                               <ul class="list-group list-group-horizontal-sm">
                                   <li class="list-group-item w-25 font-weight-bold">Representative:</li>
-                                  <li class="list-group-item w-75"> {{ case_information.getRep }}</li>
+                                  <li class="list-group-item w-75"> {{ case_information.get_rep }}</li>
                               </ul>
                           </li>
 
                           <li class="list-group-item p-0 border-0">
                               <ul class="list-group list-group-horizontal-sm">
                                   <li class="list-group-item w-25 font-weight-bold">Intermediary:</li>
-                                  <li class="list-group-item w-75"> {{case_information.getFI }} ({{case_information.fiid.fi_juris}})</li>
+                                  <li class="list-group-item w-75"> {{case_information.get_fi }} ({{case_information.fi_id.fi_juris}})</li>
                               </ul>
                           </li>
 
                           <li class="list-group-item p-0 border-0">
                               <ul class="list-group list-group-horizontal-sm">
                                   <li class="list-group-item w-25 font-weight-bold">PPRB Rep:</li>
-                                  <li class="list-group-item w-75">{{ case_information.getPRRB }}</li>
+                                  <li class="list-group-item w-75">{{ case_information.get_prrb }}</li>
                               </ul>
                           </li>
 
                           <li class="list-group-item p-0 border-0">
                               <ul class="list-group list-group-horizontal-sm">
                                   <li class="list-group-item w-25 font-weight-bold">Appeal Status:</li>
-                                  <li class="list-group-item w-75">{{ case_information.getStatus }}</li>
+                                  <li class="list-group-item w-75">{{ case_information.get_status }}</li>
                               </ul>
                           </li>
 
@@ -57,10 +57,10 @@
                           </li>
                           <li class="list-group-item p-0 border-0">
                               <ul class="list-group list-group-horizontal-sm">
-                                  <li class="list-group-item flex-fill font-weight-bold">Create Date:</li>
-                                  <li class="list-group-item flex-fill">{{ case_information.createdate|date:'N d, Y'}}</li>
                                   <li class="list-group-item flex-fill font-weight-bold">Request Date:</li>
-                                  <li class="list-group-item flex-fill">{{ case_information.requestdate|date:'N d, Y' }}</li>
+                                  <li class="list-group-item flex-fill">{{ case_information.request_date|date:'N d, Y' }}</li>
+                                  <li class="list-group-item flex-fill font-weight-bold">Create Date:</li>
+                                  <li class="list-group-item flex-fill">{{ case_information.create_event|date:'N d, Y'}}</li>
                               </ul>
                           </li>
                           {% if case_information.is_ack %}
@@ -189,11 +189,11 @@
                                     <td>{{ issue.provider_number }}</td>
                                     <td>{{ issue.fiscal_year }}</td>
                                     <td>{{ issue.npr_date|date:'m/d/Y' }}</td>
-                                    <td>{{ issue.issueid }}</td>
-                                    <td>{{ issue.get_issuename }}</td>
+                                    <td>{{ issue.issue_id }}</td>
+                                    <td>{{ issue.get_issue_name }}</td>
                                     <td>${{ issue.amount|intcomma }}</td>
                                     <td>{{ issue.to }}</td>
-                                    <td>{{ issue.todate|date:'m/d/Y' }}</td>
+                                    <td>{{ issue.to_date|date:'m/d/Y' }}</td>
                                     <td>{{ issue.from }}</td>
                                     <td class="p-0"><button class="btn btn-primary w-100">Transfer</button></td>
                                 </tr>
@@ -203,7 +203,7 @@
                                 </td>
                               </tr>
                               <tr>
-                                  <td class="p-0" colspan="10"><a class="btn btn-primary w-100" href="{% url 'addIssue' case_information.case_number %}">Add Issue</a></td>
+                                  <td class="p-0" colspan="10"><a class="btn btn-primary w-100" href="#">Add Issue</a></td>
 
                               </tr>
                     </table>
