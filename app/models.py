@@ -127,7 +127,7 @@ class status_master(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return '{0} - {1}'.format(str(self.status_id), self.status)
+        return '{0}-{1}'.format(str(self.status_id), self.status)
 
 class appeal_master(models.Model): # my person model related to example
     case_number = models.CharField(primary_key=True, max_length=255)
@@ -145,8 +145,8 @@ class appeal_master(models.Model): # my person model related to example
     general_info_and_notes = models.TextField(blank=True, null=True)
     prrb_trk_num = models.CharField(max_length=255, blank=True, null=True)
     mac_trk_num = models.CharField(max_length=255, blank=True, null=True)
-    create_date = models.DateTimeField(blank=True, null=True) # Date of Acknowledgement
-    request_date = models.DateTimeField(blank=True, null=True) # Submission Date
+    create_date = models.DateField(blank=True, null=True) # Date of Acknowledgement
+    request_date = models.DateField(blank=True, null=True) # Submission Date
     acknowledged = models.BooleanField(blank=True, null=True, default=False) # will update the create_date
 
 

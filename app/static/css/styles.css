@@ -6,6 +6,12 @@
 *
 */
 
+.new-appeal {
+  width:75%;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  margin-right: 2rem;
+}
 
 .appeal-information {
   width:50rem

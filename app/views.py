@@ -6,6 +6,9 @@ from app.graph_helper import get_user, get_calendar_events, create_event
 import dateutil.parser
 from app.forms import *
 from django.views.generic import TemplateView
+import datetime
+from datetime import datetime
+from datetime import date
 
 # Create your views here.
 
@@ -74,6 +77,7 @@ def calendar(request):
     return render(request, 'app/calendar.html', context)
 
 def new_appeal(request):
+    today = datetime.today()
     context = initialize_context(request)
     form = new_appeal_master_form(request.POST)
     context['form'] = form
@@ -81,9 +85,10 @@ def new_appeal(request):
     if request.method == 'POST':
         if form.is_valid():
             new_appeal_master_case = form.save(commit=False)
+            new_appeal_master_case.request_date = today
             new_appeal_master_case.save()
 
-            return redirect(request, 'home', context=context)
+            return render(request, 'app/index.html', context=context)
     return render(request, 'app/new_appeal_master.html', context=context)
 
 """

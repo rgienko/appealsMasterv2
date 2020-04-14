@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
 from .models import appeal_master
 
 
@@ -17,4 +17,13 @@ class new_appeal_master_form(ModelForm):
 
     class Meta:
         model = appeal_master
-        fields = ['case_number', 'rep_id', 'fi_id', 'prrb_contact_id', 'status_id', 'appeal_name', 'structure', 'request_date']
+        fields = ['case_number', 'rep_id', 'fi_id', 'prrb_contact_id', 'status_id', 'appeal_name', 'structure']
+        labels = {
+            'case_number':_('Case Number:'),
+            'rep_id':_('SRG Representative:'),
+            'fi_id':_('Intermediary (MAC):'),
+            'prrb_contact_id':_('PRRB Representative'),
+            'status_id':_('Appeal Status:'),
+            'appeal_name':_('Appeal Name:'),
+            'structure':_('Structure:'),
+        }
