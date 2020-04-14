@@ -40,4 +40,4 @@ class add_critical_due_dates_form(ModelForm):
 
     class Meta:
         model = critical_dates_master
-        fields = ['case_number','critical_date', 'action_id']
+        fields = ['critical_date', 'action_id']

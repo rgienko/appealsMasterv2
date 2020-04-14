@@ -1,0 +1,54 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<div class="container">
+      <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Add Critical Due Dates - CN: {{ case_information.case_number }}</h5>
+      <div class="card mt-3">
+          <div class="modal-body">
+              <form class="" action="" method="post">
+                  {% csrf_token %}
+
+                  {% for hidden_field in due_form.hidden_fields %}
+                      {{ hidden_field }}
+                  {% endfor %}
+
+                  {% for field in due_form.visible_fields %}
+                      <div class="form-group">
+                        <ul class="list-group">
+                            <li class="list-group-item p-0 border-0">
+                                <ul class="list-group list-group-horizontal-sm">
+                                    <li class="list-group-item w-25">{{ field.label_tag }}</li>
+                                    <li class="list-group-item w-75">{{ field }}</li>
+                                </ul>
+                            </li>
+                        </ul>
+                      </div>
+                  {% endfor %}
+                  <input type="submit" name="dueButton" class="btn btn-primary"></input>
+              </form>
+          </div>
+      </div>
+
+      <hr/>
+
+      <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Review Current Critical Due Dates</h5>
+
+      {% for date in case_due_dates %}
+      <div class="card mt-3">
+          <div class="card-header">
+              <span class="font-weight-bold">{{ date.get_response}}:</span>  {{ date.get_action_note }} ({{ date.action_id }})
+          </div>
+          <div class="card-body">
+            {{ date.get_action_details }}
+          </div>
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item"></li>
+              <li class="list-group-item font-weight-bold">Critical Due Date: {{ date.critical_date|date:'N d, Y' }}</li>
+          </ul>
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

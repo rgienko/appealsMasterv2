@@ -110,57 +110,18 @@
                                 <tr>
                                     <th scope="col">Action</th>
                                     <th scope="col">Critical Date</th>
-                                    <th scope="col">Details</th>
                                 </tr>
                             </thead>
                               {% for date in case_due_dates %}
                                 <tr>
-                                    <td>{{ date.actionid }}</td>
+                                    <td>{{ date.action_id }}</td>
                                     <td>{{ date.critical_date|date:'N d, Y' }}</td>
-                                    <td><button class="btn btn-info w-100" data-toggle="modal" href="#{{date.id}}">Details</button></td>
+
                                 </tr>
-                                <div class="modal" id="{{date.id}}" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Critical Due Date Details</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                  <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <ul class="list-group">
-                                                    <li class="list-group-item p-0 border-0">
-                                                        <ul class="list-group list-group-horizontal-sm">
-                                                                <li class="list-group-item w-25">Action:</li>
-                                                                <li class="list-group-item w-75">{{ date.actionid }} - {{ date.get_action_note }}</li>
-                                                        </ul>
-                                                    </li>
 
-                                                    <li class="list-group-item p-0 border-0">
-                                                        <ul class="list-group list-group-horizontal-sm">
-                                                            <li class="list-group-item w-25">Due Date:</li>
-                                                            <li class="list-group-item w-75">{{ date.critical_date }}</li>
-                                                        </ul>
-                                                    </li>
-
-                                                    <li class="list-group-item p-0 border-0">
-                                                        <ul class="list-group list-group-horizontal-sm">
-                                                            <li class="list-group-item w-25">Action Details:</li>
-                                                            <li class="list-group-item w-75">{{ date.get_action_details }}</li>
-                                                        </ul>
-                                                    </li>
-                                                <ul>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                               {% endfor %}
                         </table>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#AddCriticalDue">Add Critical Due Dates</button>
+                        <a class="btn btn-primary" href="{% url 'add_critical_due_dates_url' case_information.case_number %}"> Review / Add Critical Due Dates</a>
                     </div>
                 </div>
             </div>
@@ -213,8 +174,6 @@
     </div>
     <!-- Code for the Modals -->
 
-
-
     <div class="modal" id="AckModel" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -227,7 +186,22 @@
                 <div class="modal-body input-group date" id="datetimepicker1" data-target-input="nearest">
                     <form class="" action="" method="post">
                         {% csrf_token %}
-                        {{ form.as_p }}
+                        {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field }}
+                        {% endfor %}
+
+                        {% for field in form.visible_fields %}
+                            <div class="form-group">
+                              <ul class="list-group">
+                                  <li class="list-group-item p-0 border-0">
+                                      <ul class="list-group list-group-horizontal">
+                                          <li class="list-group-item w-50">{{ field.label_tag }}</li>
+                                          <li class="list-group-item">{{ field }}</li>
+                                      </ul>
+                                  </li>
+                              </ul>
+                            </div>
+                        {% endfor %}
 
                     <input type="submit" name="ackButton" value="Submit" class="btn btn-primary"></input>
                     </form>
@@ -244,41 +218,7 @@
         </div>
     </div>
 
-    <div class="modal" id="AddCriticalDue" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Critical Due Dates - CN: {{ case_information.case_number }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form class="" action="" method="post">
-                        {% csrf_token %}
 
-                        {% for hidden_field in due_form.hidden_fields %}
-                            {{ hidden_field }}
-                        {% endfor %}
-
-                        {% for field in due_form.visible_fields %}
-                            <div class="form-group">
-                              <ul class="list-group">
-                                  <li class="list-group-item p-0 border-0">
-                                      <ul class="list-group list-group-horizontal-sm">
-                                          <li class="list-group-item w-25">{{ field.label_tag }}</li>
-                                          <li class="list-group-item w-75">{{ field }}</li>
-                                      </ul>
-                                  </li>
-                              </ul>
-                            </div>
-                        {% endfor %}
-                        <input type="submit" name="dueButton" class="btn btn-primary"></input>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 

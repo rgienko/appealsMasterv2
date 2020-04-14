@@ -149,6 +149,9 @@ class appeal_master(models.Model): # my person model related to example
     request_date = models.DateField(blank=True, null=True) # Submission Date
     acknowledged = models.BooleanField(blank=True, null=True, default=False) # will update the create_date
 
+    def __str__(self):
+        return(self.case_number)
+
     def get_rep(self):
         return(self.rep_id.rep)
 
@@ -191,7 +194,7 @@ class provider_master(models.Model):
 
 class critical_dates_master(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    case_number = models.ForeignKey(appeal_master, on_delete=models.CASCADE, default='00-0000')
+    case_number = models.CharField(max_length=7)
     critical_date = models.DateField()
     action_id = models.ForeignKey(action_master, on_delete=models.CASCADE, blank=True, null=True)
     # action = models.TextField(blank=True, null=True)
@@ -206,3 +209,6 @@ class critical_dates_master(models.Model):
 
     def get_action_details(self):
         return(self.action_id.description)
+
+    def get_response(self):
+        return(self.action_id.type)
