@@ -53,6 +53,9 @@ class state_name_master(models.Model):
     state_id = models.CharField(primary_key=True, max_length=2)
     state_name = models.CharField(max_length=25, blank=True, null=True)
 
+    def __str__(self):
+        return(self.state_id)
+
 class parent_master(models.Model):
     parent_id = models.CharField(primary_key=True, max_length=255)
     parent_full_name = models.CharField(max_length=255, blank=True, null=True)

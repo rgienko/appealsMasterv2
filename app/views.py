@@ -115,9 +115,6 @@ def add_critical_due_dates(request, pk):
     case_due_dates = critical_dates_master.objects.filter(case_number__exact=case).order_by('critical_date')
     due_form = add_critical_due_dates_form(request.POST)
 
-    prov = provider_master.objects.filter(case_number__exact=case)
-
-
     if request.method == 'POST' and 'dueButton' in request.POST:
         if due_form.is_valid():
             new_due_date = due_form.save(commit=False)
@@ -126,11 +123,16 @@ def add_critical_due_dates(request, pk):
 
             action = action_master.objects.get(pk=new_due_date.action_id)
             prov = provider_master.objects.filter(case_number__exact=case)
+            p = prov[:1]
+            for prov in p:
+                fy = prov.fiscal_year
+                pnum = prov.provider_number
 
-            subject = '{0}~{1}~FY{2}~({3})'.format(new_due_date.action_id, case, str(prov.fiscal_year), '36-0020')
+            subject = '{0}~{1}~FY{2}~({3})'.format(new_due_date.action_id, case, str(fy) ,pnum)
             content = action.description
-            start = new_due_date.critical_date + timedelta(hours=random.randint(1,24), minutes=random.randint(1,50))
-            end = new_due_date.critical_date + timedelta(minutes=30)
+            start = new_due_date.critical_date
+            start_date = start + timedelta(hours=random.randint(12,24))
+            end = start_date + timedelta(minutes=30)
             location = 'N/A'
             is_all_day = False
 
@@ -138,7 +140,7 @@ def add_critical_due_dates(request, pk):
                 "subject":subject,
                 "body": {"contentType": "html", "content":content},
                 "start": {
-                    "dateTime":start.strftime("%Y-%m-%dT%H:%M:%S.%f"),
+                    "dateTime":start_date.strftime("%Y-%m-%dT%H:%M:%S.%f"),
                     "timeZone":"UTC",
                     },
                 "end": {
@@ -147,17 +149,8 @@ def add_critical_due_dates(request, pk):
                     },
                 "location": {"displayName":location},
                 "isReminderOn": True,
-                "reminderMinutesBeforeStart":10000,
+                "reminderMinutesBeforeStart":1024,
                 "isAllDay": is_all_day,
-                "attendees": [
-                    {
-                        "emailAddress": {
-                            "address": "onebestbd@gmail.com",
-                            "name":'Appeals'
-                        },
-                        "type": "required"
-                    }
-                ]
             }
             new_event = create_event(token, payload)
 
