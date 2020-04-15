@@ -10,7 +10,7 @@ from django.views.generic import TemplateView
 import datetime
 from datetime import datetime
 from datetime import date
-
+from django.db.models import Avg, Sum
 # Create your views here.
 
 
@@ -30,11 +30,20 @@ def initialize_context(request):
 
 def home(request):
     context = initialize_context(request)
-
+    due_next = critical_dates_master.objects.all().order_by('-critical_date')
+    most_rec_cases = appeal_master.objects.all().order_by('-request_date')
+    total_cases = appeal_master.objects.count()
+    impact = provider_master.objects.filter(active_in_appeal_field__exact=True).aggregate(sum=Sum('amount'))
+    ''' total_impact = '{:20,.2f}'.format(impact['sum'])'''
     if request.method =='POST':
         search_case = request.POST.get('search')
 
         return redirect(r'appeal_detail_url', search_case)
+
+    context['due_next'] = due_next
+    context['most_rec_cases'] = most_rec_cases
+    context['total_cases'] = total_cases
+
 
     return render(request, 'app/index.html', context)
 

@@ -63,6 +63,7 @@ def get_token(request):
         if now >= expire_time:
             # refresh token_endpoin
             aad_auth = OAuth2Session(settings['app_id'],
+                            token=token,
                             scope=settings['scopes'],
                             redirect_uri=settings['redirect'])
 

@@ -1,7 +1,7 @@
 {% extends 'app/layout.html' %}
 
 {% block content %}
-<div class="container-fluid ">
+<div class="container-fluid px-5">
     <div class="card-deck mt-3">
         <div class="card shadow">
             <div class="card-body">
@@ -31,19 +31,19 @@
                     <th scope="col">Case Number</th>
                     <th scope="col">Critical Date</th>
                     <th scope="col">Action</th>
+                    <th scope="col">Details</th>
                 </tr>
             </thead>
             {% for due in due_next %}
-                <tr>
-                    <td><a href="{% url 'appealDetails' due.case_number %}">{{ due.case_number }}</a></td>
+                <tr >
+                    <td class=""><a href="{% url 'appeal_detail_url' due.case_number %}">{{ due.case_number }}</a></td>
                     <td>{{ due.critical_date|date:'m/d/Y' }}</td>
-                    <td>{{ due.actionid }}</td>
+                    <td>{{ due.action_id }}</td>
+                    <td class="p-0"><a class="btn btn-info w-100" href="{& url 'review_case_critical_due_dates' due.case_number %}">Details</a></td>
                 </tr>
             {% endfor %}
         </table>
     </div>
-
-
 
     <h5 class="font-weight-bold text-uppercase mt-5 pl-1">Recent Cases</h5>
 
@@ -52,17 +52,23 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col">Case Number</th>
-                    <th scope="col">Case Name</th>
                     <th scope="col">Structure</th>
-                    <th scope="col">Create Date</th>
+                    <th scope="col">Case Name</th>
+                    <th scope="col">Request Date</th>
+                    <th scope="col">Create Date<th>
                 </tr>
             </thead>
             {% for case in most_rec_cases %}
                 <tr>
-                    <td><a href="{% url 'appealDetails' case.case_number %}">{{ case.case_number }}</a></td>
-                    <td>{{ case.appeal_name }}</td>
-                    <td>{{ case.structure }}</td>
-                    <td>{{ case.createdate }}</td>
+                    <td><a href="{% url 'appeal_detail_url' case.case_number %}">{{ case.case_number }}</a></td>
+                    <td>{{ case.structure|title }}</td>
+                    {% if case.structure == 'INDIVIDUAL' %}
+                        <td></td>
+                    {% else %}
+                      <td>{{ case.appeal_name }}</td>
+                    {% endif %}
+                    <td>{{ case.request_date }}</td>
+                    <td>{{ case.create_date}}</td>
                 </tr>
             {% endfor %}
         </table>
