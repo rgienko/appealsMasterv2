@@ -7,9 +7,10 @@ import dateutil.parser
 from app.forms import *
 from app.models import *
 from django.views.generic import TemplateView
+import random
 import datetime
 from datetime import datetime
-from datetime import date
+from datetime import date, timedelta
 from django.db.models import Avg, Sum
 # Create your views here.
 
@@ -114,11 +115,51 @@ def add_critical_due_dates(request, pk):
     case_due_dates = critical_dates_master.objects.filter(case_number__exact=case).order_by('critical_date')
     due_form = add_critical_due_dates_form(request.POST)
 
+    prov = provider_master.objects.filter(case_number__exact=case)
+
+
     if request.method == 'POST' and 'dueButton' in request.POST:
         if due_form.is_valid():
             new_due_date = due_form.save(commit=False)
             new_due_date.case_number = case
             new_due_date.save()
+
+            action = action_master.objects.get(pk=new_due_date.action_id)
+            prov = provider_master.objects.filter(case_number__exact=case)
+
+            subject = '{0}~{1}~FY{2}~({3})'.format(new_due_date.action_id, case, str(prov.fiscal_year), '36-0020')
+            content = action.description
+            start = new_due_date.critical_date + timedelta(hours=random.randint(1,24), minutes=random.randint(1,50))
+            end = new_due_date.critical_date + timedelta(minutes=30)
+            location = 'N/A'
+            is_all_day = False
+
+            payload = {
+                "subject":subject,
+                "body": {"contentType": "html", "content":content},
+                "start": {
+                    "dateTime":start.strftime("%Y-%m-%dT%H:%M:%S.%f"),
+                    "timeZone":"UTC",
+                    },
+                "end": {
+                    "dateTime":end.strftime("%Y-%m-%dT%H:%M:%S.%f"),
+                    "timeZone":"UTC",
+                    },
+                "location": {"displayName":location},
+                "isReminderOn": True,
+                "reminderMinutesBeforeStart":10000,
+                "isAllDay": is_all_day,
+                "attendees": [
+                    {
+                        "emailAddress": {
+                            "address": "onebestbd@gmail.com",
+                            "name":'Appeals'
+                        },
+                        "type": "required"
+                    }
+                ]
+            }
+            new_event = create_event(token, payload)
 
             return redirect(r'appeal_detail_url', case)
 
@@ -136,6 +177,9 @@ def add_critical_due_dates(request, pk):
         context
         )
 
+
+
+
 def appeal_details(request, pk):
     context = initialize_context(request)
     token = get_token(request)
@@ -146,12 +190,14 @@ def appeal_details(request, pk):
     case_issues = provider_master.objects.filter(case_number__exact=case).order_by('issue_id')
     count = case_issues.count()
 
+
     if case_information.structure == 'INDIVIDUAL':
         provider_information = case_issues[:1]
     else:
         provider_information = case_issues
 
     form = acknowledge_case_form(request.POST)
+    add_issue_form = add_issue(request.POST)
 
     if request.method =='POST' and 'ackButton' in request.POST:
         if form.is_valid():
@@ -163,8 +209,19 @@ def appeal_details(request, pk):
         else:
             form = acknowledge_case_form()
 
+    elif request.method == 'POST' and 'add_button' in request.POST:
+        if add_issue_form.is_valid():
+            new_issue = add_issue_form.save(commit=False)
+            new_issue.case_number = case
+            new_issue.save()
+
+            return redirect(r'appeal_detail_url', case)
+        else:
+            add_issue_form = add_issue()
+
 
     context['form'] = form
+    context['add_issue_form'] = add_issue_form
     context['case_information'] = case_information
     context['case_due_dates'] = case_due_dates
     context['case_issues'] = case_issues

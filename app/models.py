@@ -166,7 +166,7 @@ class appeal_master(models.Model): # my person model related to example
 
 class provider_master(models.Model):
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
-    case_number = models.ForeignKey(appeal_master, on_delete=models.CASCADE, default="00-0000")
+    case_number = models.CharField(max_length=7)
     provider_number = models.ForeignKey(prov_name_master, on_delete=models.CASCADE, default="01-0001") #FK
     fiscal_year = models.IntegerField(blank=True, null=True)
     npr_date = models.DateField(blank=True, null=True)
@@ -191,11 +191,26 @@ class provider_master(models.Model):
     def get_issue_name(self):
         return(self.issue_id.issue)
 
+    def get_provider_name(self):
+        return(self.provider_number.provider_name)
+
+    def get_provider_parent(self):
+        return(self.provider_number.parent_id.parent_full_name)
+
+    def get_provider_fye(self):
+        return(self.provider_number.fye)
+
+    def get_provider_city(self):
+        return(self.provider_number.city)
+
+    def get_provider_state(self):
+        return(self.provider_number.state_id)
+
 
 class critical_dates_master(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     case_number = models.CharField(max_length=7)
-    critical_date = models.DateField()
+    critical_date = models.DateTimeField()
     action_id = models.ForeignKey(action_master, on_delete=models.CASCADE, blank=True, null=True)
     # action = models.TextField(blank=True, null=True)
     response = models.TextField(blank=True, null=True)

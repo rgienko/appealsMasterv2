@@ -31,15 +31,19 @@
                     <th scope="col">Case Number</th>
                     <th scope="col">Critical Date</th>
                     <th scope="col">Action</th>
-                    <th scope="col">Details</th>
+                    <th scope="col">Action Desc</th>
+                    <th scope="col">Response</th>
+                    <th scope="col">Status</th>
                 </tr>
             </thead>
             {% for due in due_next %}
-                <tr >
+                <tr>
                     <td class=""><a href="{% url 'appeal_detail_url' due.case_number %}">{{ due.case_number }}</a></td>
                     <td>{{ due.critical_date|date:'m/d/Y' }}</td>
                     <td>{{ due.action_id }}</td>
-                    <td class="p-0"><a class="btn btn-info w-100" href="{& url 'review_case_critical_due_dates' due.case_number %}">Details</a></td>
+                    <td>{{ due.get_action_note }}</td>
+                    <td>{{ due.get_response|title }}</td>
+                    <td>{{ due.status }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -54,8 +58,9 @@
                     <th scope="col">Case Number</th>
                     <th scope="col">Structure</th>
                     <th scope="col">Case Name</th>
+                    <th scope="col">Intermediary</th>
                     <th scope="col">Request Date</th>
-                    <th scope="col">Create Date<th>
+                    <th scope="col">Acknowledged<th>
                 </tr>
             </thead>
             {% for case in most_rec_cases %}
@@ -67,8 +72,13 @@
                     {% else %}
                       <td>{{ case.appeal_name }}</td>
                     {% endif %}
-                    <td>{{ case.request_date }}</td>
-                    <td>{{ case.create_date}}</td>
+                      <td>{{ case.fi_id }}</td>
+                      <td>{{ case.request_date }}</td>
+                    {% if case.create_date != None %}
+                      <td>{{ case.create_date}}</td>
+                    {% else %}
+                      <td></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>

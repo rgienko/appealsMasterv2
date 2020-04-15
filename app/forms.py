@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, Textarea, DateField
-from .models import appeal_master, critical_dates_master
+from .models import appeal_master, critical_dates_master, provider_master
 
 
 class CalendarEventForm(forms.Form):
@@ -12,6 +12,38 @@ class CalendarEventForm(forms.Form):
     location = forms.CharField()
     is_all_day = forms.BooleanField(required = False)
 
+class add_issue(ModelForm):
+
+    class Meta:
+        model = provider_master
+        fields = [
+                    'provider_number',
+                    'fiscal_year',
+                    'npr_date',
+                    'receipt_date',
+                    'was_added',
+                    'issue_id',
+                    'audit_adjustments',
+                    'charge_id',
+                    'amount',
+                    'sri_staff_id',
+                    'active_in_appeal_field',
+                    'provider_specific_note'
+                ]
+        labels = {
+                    'provider_number':_('Provider Number:'),
+                    'fiscal_year':_('Fiscal Year:'),
+                    'npr_date':_('NPR Date:'),
+                    'receipt_date': _('Reciept Date:'),
+                    'was_added': _('Was Added:'),
+                    'issue_id': _('Issue:'),
+                    'audit_adjustments': _('Audit Adjustements:'),
+                    'charge_id':_('Code:'),
+                    'amount':_('Amount:'),
+                    'sri_staff_id':_('SRG Staff:'),
+                    'active_in_appeal_field':_('Active:'),
+                    'provider_specific_note':_('Provider Specific Note:')
+            }
 
 class new_appeal_master_form(ModelForm):
 
