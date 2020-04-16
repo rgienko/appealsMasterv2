@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.contrib import messages
 from app.auth_helper import get_sign_in_url, get_token_from_code, store_token, store_user, remove_user_and_token, get_token
 from app.graph_helper import get_user, get_calendar_events, create_event
 import dateutil.parser
 from app.forms import *
 from app.models import *
 from django.views.generic import TemplateView
+import os
 import random
 import datetime
 from datetime import datetime
@@ -29,6 +31,7 @@ def initialize_context(request):
     context['user'] = request.session.get('user', {'is_authenticated':False})
     return context
 
+
 def home(request):
     context = initialize_context(request)
     due_next = critical_dates_master.objects.all().order_by('-critical_date')
@@ -36,11 +39,44 @@ def home(request):
     total_cases = appeal_master.objects.count()
     impact = provider_master.objects.filter(active_in_appeal_field__exact=True).aggregate(sum=Sum('amount'))
     ''' total_impact = '{:20,.2f}'.format(impact['sum'])'''
-    if request.method =='POST':
+
+    if request.method =='POST' and 'make_dir_button' not in request.POST:
         search_case = request.POST.get('search')
 
         return redirect(r'appeal_detail_url', search_case)
 
+
+    new_dir_form = make_dir_form(request.POST)
+    if request.method == 'POST' and 'make_dir_button' in request.POST:
+        if new_dir_form.is_valid():
+            type = request.POST.get('type')
+            parent = request.POST.get('parent')
+            p_num = request.POST.get('p_num')
+            issue = request.POST.get('issue')
+            fy = request.POST.get('fy')
+            c_num = request.POST.get('c_num')
+
+            if type == 'INDIVIDUAL':
+                # Goal: S:\3-AP\1-DOCS\INDIVIDUAL\IND~01-0001~2016~XX-XXXX
+                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}'.format(type, parent, p_num, fy, c_num)
+            else:
+                # Goal: S:\3-AP\1-DOCS\GROUP\IND~CN-XXXX~2016~1~SSI ERR
+                issue_abb = issue_master.objects.get(pk=issue)
+                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}~{5}'.format(type, parent,fy,c_num,issue, issue_abb.abbreviation)
+
+            try:
+                os.mkdir(new_path)
+                # Sucess Message
+                messages.success(request, 'Directory created successfully!')
+                new_dir_form = make_dir_form()
+            except:
+                # Directory Already Exists
+                messages.error(request, 'Directory already exsists, please correct and try again.')
+
+        else:
+            new_dir_form = make_dir_form()
+
+    context['new_dir_form'] = new_dir_form
     context['due_next'] = due_next
     context['most_rec_cases'] = most_rec_cases
     context['total_cases'] = total_cases
@@ -126,9 +162,17 @@ def add_critical_due_dates(request, pk):
             p = prov[:1]
             for prov in p:
                 fy = prov.fiscal_year
-                pnum = prov.provider_number
 
-            subject = '{0}~{1}~FY{2}~({3})'.format(new_due_date.action_id, case, str(fy) ,pnum)
+            if case_information.structure == 'INDIVIDUAL':
+                p = prov[:1]
+                for prov in p:
+                    pnum = prov.provider_number
+                o_sub = '{0}~{1}~FY{2}~({3})'.format(new_due_date.action_id, case, str(fy) ,pnum)
+            else:
+                o_sub = '{0}~{1}G~FY{2}'.format(new_due_date.action_id, case, str(fy))
+
+            # subject = '{0}~{1}~FY{2}~({3})'.format(new_due_date.action_id, case, str(fy) ,pnum)
+            subject = o_sub
             content = action.description
             start = new_due_date.critical_date
             start_date = start + timedelta(hours=random.randint(12,24))
@@ -228,7 +272,56 @@ def appeal_details(request, pk):
         context
         )
 
+'''
+def make_dir(request):
+    context = initialize_context(request)
+    token = get_token(request)
 
+    new_dir_form = make_dir_form(request.POST)
+
+    if request.method == 'POST' and 'make_dir_button' in request.POST:
+        if new_dir_form.is_valid():
+            type = request.POST.get('type')
+            parent = request.POST.get('parent')
+            p_num = request.POST.get('p_num')
+            issue = request.POST.get('issue')
+            fy = request.POST.get('fy')
+            c_num = request.POST.get('c_num')
+
+
+
+            if type == 'INDIVIDUAL':
+                # Goal: S:\3-AP\1-DOCS\INDIVIDUAL\IND~01-0001~2016~XX-XXXX
+                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}'.format(type, parent, p_num, fy, c_num)
+                try:
+                    os.mkdir(new_path)
+                    # Sucess Message
+                    messages.success(request, 'Directory created successfully!')
+                    return context
+                except:
+                    # Directory Already Exists
+                    messages.error(request, 'Directory already exsists')
+            else:
+                # Goal: S:\3-Ap\1-DOCS\GROUP\OPT~2016~XX-XXXX~1~SSI ERR
+                issue_abb = issue_master.objects.get(pk=issue).only('abbreviation')
+                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}~{5}'.format(type, parent,fy,c_num,issue, issue_abb)
+                try:
+                    os.mkdir(new_path)
+                    # Sucess Message
+                    messages.success(request, 'Directory created successfully!')
+                except:
+                    # Directory Already Exists
+                    messages.error(request, 'Directory already exsists')
+
+
+
+        else:
+            new_dir_form = make_dir_form()
+
+    context['new_dir_form'] = new_dir_form
+
+    return context
+'''
 
 '''
 class new_due_date(TemplateView):

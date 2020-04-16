@@ -11,10 +11,6 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
-
-
-
-
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -74,6 +70,7 @@
         <ul class="nav flex-column mb-0">
             <li class="nav-item"><a class="nav-link font-italic text-dark" href="{% url 'home' %}">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link font-italic text-dark" href="{% url 'new_appeal_master' %}">New Appeal</a></li>
+            <li class="nav-item"><a class="nav-link font-italic text-dark" data-toggle="modal"  href="#make_dir_modal">Create Directory</a></li>
             <li class="nav-item"><a class="nav-link font-italic text-dark" href="{% url 'calendar' %}">Critical Due Dates</a></li>
             <li class="nav-item"><a class="nav-link font-italic text-dark" href="{% url 'new_appeal_master' %}">Update Case - Comming Soon!</a></li>
         </ul>
@@ -97,10 +94,47 @@
               </div>
 
           </div>
+        {% include 'app/messages.html' %}
         {% block content %}
 
         {% endblock %}
 
+        <div class="modal" id="make_dir_modal" tabindex="-1" role="dialog">
+
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Issue</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="" action="" method="post">
+                            {% csrf_token %}
+
+                            {% for hidden_field in new_dir_form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+
+                            {% for field in new_dir_form.visible_fields %}
+                                <div class="form-group">
+                                  <ul class="list-group">
+                                      <li class="list-group-item p-0 border-0">
+                                          <ul class="list-group list-group-horizontal-sm">
+                                              <li class="list-group-item w-25">{{ field.label_tag }}</li>
+                                              <li class="list-group-item w-75">{{ field }}</li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                                </div>
+                            {% endfor %}
+                            <input type="submit" name="make_dir_button" class="btn btn-primary"></input>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>

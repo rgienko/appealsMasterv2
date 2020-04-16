@@ -200,6 +200,9 @@ class provider_master(models.Model):
     def get_provider_parent(self):
         return(self.provider_number.parent_id.parent_full_name)
 
+    def get_provider_parent_id(self):
+        return(self.provider_number.parent_id)
+
     def get_provider_fye(self):
         return(self.provider_number.fye)
 

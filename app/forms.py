@@ -1,8 +1,21 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, Textarea, DateField
-from .models import appeal_master, critical_dates_master, provider_master
+from .models import appeal_master, critical_dates_master, provider_master, issue_master, parent_master
 
+
+class  make_dir_form(forms.Form):
+    types = [
+                ('INDIVIDUAL', 'Individual'),
+                ('GROUP', 'Group')
+            ]
+    type = forms.ChoiceField(choices=types)
+
+    parent = forms.ModelChoiceField(queryset=parent_master.objects.only('parent_id'))
+    p_num = forms.CharField(max_length=7, required=False)
+    issue = forms.ModelChoiceField(queryset=issue_master.objects.only('abbreviation'), required=False)
+    fy = forms.IntegerField()
+    c_num = forms.CharField(max_length=7)
 
 class CalendarEventForm(forms.Form):
     subject = forms.CharField()
