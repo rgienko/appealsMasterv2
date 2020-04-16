@@ -165,7 +165,7 @@
                                         <td></td>
                                     {% endif %}
                                     <td class="text-center">{{ issue.from }}</td>
-                                    <td class="p-0"><button class="btn btn-primary w-100">Transfer</button></td>
+                                    <td class="p-0"><a class="btn btn-primary w-100" href="{% url 'transfer_issue_url' issue.pk %}">Transfer</a></td>
                                 </tr>
                             {% endfor %}
                               <tr>

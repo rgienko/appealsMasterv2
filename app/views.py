@@ -215,8 +215,6 @@ def add_critical_due_dates(request, pk):
         )
 
 
-
-
 def appeal_details(request, pk):
     context = initialize_context(request)
     token = get_token(request)
@@ -272,6 +270,30 @@ def appeal_details(request, pk):
         context
         )
 
+def transfer_issue_view(request, pk):
+    context = initialize_context(request)
+    token = get_token(request)
+    issue_to_transfer = get_object_or_404(provider_master, pk=pk)
+
+    trans_form = transfer_issue_form(request.POST)
+
+    if request.method == 'POST':
+        if trans_form.is_valid():
+            issue_to_transfer.to = str(trans_form.cleaned_data['to_case'])
+            issue_to_transfer.to_date = trans_form.cleaned_data['to_date']
+            issue_to_transfer.save()
+
+            return redirect(r'appeal_detail_url', str(trans_form.cleaned_data['to_case']))
+        else:
+            trans_form = transfer_issue_form(request.POST)
+
+    context['issue_to_transfer'] = issue_to_transfer
+    context['trans_form'] = trans_form
+
+    return render(request, 'app/transfer_issue.html', context)
+
+
+# FOR REFERENCE #
 '''
 def make_dir(request):
     context = initialize_context(request)
@@ -321,9 +343,7 @@ def make_dir(request):
     context['new_dir_form'] = new_dir_form
 
     return context
-'''
 
-'''
 class new_due_date(TemplateView):
     template_name=""
 

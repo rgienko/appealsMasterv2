@@ -1,0 +1,45 @@
+{% extends "app/layout.html" %}
+{% block content %}
+
+<div class="container">
+  <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Transfer Issue To Group Appeal</h5>
+  <div class="card mt-3">
+      <div class="form-group">
+          <ul class="list-group">
+              <li class="list-group-item p-0 border-0">
+                <ul class="list-group list-group-horizontal-sm">
+                    <li class="list-group-item w-50 font-weight-bold">Issue Name</li>
+                    <li class="list-group-item w-25 font-weight-bold">Audit Adjustments</li>
+                    <li class="list-group-item w-25 font-weight-bold">Amount</li>
+                </ul>
+                  <ul class="list-group list-group-horizontal-sm">
+                      <li class="list-group-item w-50">{{ issue_to_transfer.issue_id }}</li>
+                      <li class="list-group-item w-25">{{ issue_to_transfer.audit_adjustments }}</li>
+                      <li class="list-group-item w-25">{{ issue_to_transfer.amount }}</li>
+                  </ul>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for hidden_field in trans_form.hidden_fields %}
+            {{ hidden_field }}
+        {% endfor %}
+
+        {% for field in trans_form.visible_fields %}
+        <ul class="list-group p-0">
+            <li class="list-group-item p-0 border-0">
+                <ul class="list-group list-group-horizontal-sm p-0">
+                    <li class="list-group-item w-25 font-weight-bold">{{ field.label_tag }}</li>
+                    <li class="list-group-item w-75">{{ field }}</li>
+                </ul>
+            </li>
+        </ul>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary w-100" />
+    </form>
+</div>
+
+{% endblock %}

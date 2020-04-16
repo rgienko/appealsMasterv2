@@ -24,6 +24,7 @@ urlpatterns = [
     path('callback', views.callback, name='callback'),
     path(r'newAppeal/', views.new_appeal, name='new_appeal_master' ),
     path(r'details/<pk>/', views.appeal_details, name='appeal_detail_url'),
+    path(r'transfer/<pk>/', views.transfer_issue_view, name='transfer_issue_url'),
     path(r'details/<pk>/critical_due/', views.add_critical_due_dates, name='add_critical_due_dates_url'),
     path(r'calendar/', views.calendar, name='calendar'),
 ]

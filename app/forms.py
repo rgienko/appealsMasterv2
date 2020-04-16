@@ -80,6 +80,14 @@ class acknowledge_case_form(forms.Form):
         data = self.cleaned_data['acknowledged_date']
         return data
 
+class transfer_issue_form(forms.Form):
+
+    to_case = forms.ModelChoiceField(queryset=appeal_master.objects.only('case_number'))
+    to_date = forms.DateField()
+
+    def clean_to_date(self):
+        data = self.cleaned_data['to_date']
+        return data
 
 class add_critical_due_dates_form(ModelForm):
 
