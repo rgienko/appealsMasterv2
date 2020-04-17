@@ -283,6 +283,28 @@ def transfer_issue_view(request, pk):
             issue_to_transfer.to_date = trans_form.cleaned_data['to_date']
             issue_to_transfer.save()
 
+            new_group_prov = provider_master(case_number= issue_to_transfer.to,
+                                                provider_number = issue_to_transfer.provider_number,
+                                                fiscal_year = issue_to_transfer.fiscal_year,
+                                                npr_date = issue_to_transfer.npr_date,
+                                                receipt_date = issue_to_transfer.receipt_date,
+                                                was_added = issue_to_transfer.was_added,
+                                                issue_id = issue_to_transfer.issue_id,
+                                                charge_id = issue_to_transfer.charge_id,
+                                                amount = issue_to_transfer.amount,
+                                                audit_adjustments = issue_to_transfer.audit_adjustments,
+                                                sri_staff_id = issue_to_transfer.sri_staff_id,
+                                                active_in_appeal_field = issue_to_transfer.active_in_appeal_field,
+                                                to = '',
+                                                to_date = issue_to_transfer.to_date,
+                                                from_field = str(issue_to_transfer.case_number),
+                                                agreement = issue_to_transfer.agreement,
+                                                agree_note = issue_to_transfer.agree_note,
+                                                provider_specific_note = issue_to_transfer.provider_specific_note)
+
+            new_group_prov.save()
+
+
             return redirect(r'appeal_detail_url', str(trans_form.cleaned_data['to_case']))
         else:
             trans_form = transfer_issue_form(request.POST)
