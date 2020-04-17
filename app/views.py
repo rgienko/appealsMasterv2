@@ -225,7 +225,6 @@ def appeal_details(request, pk):
     case_issues = provider_master.objects.filter(case_number__exact=case).order_by('issue_id')
     count = case_issues.count()
 
-
     if case_information.structure == 'INDIVIDUAL':
         provider_information = case_issues[:1]
     else:
