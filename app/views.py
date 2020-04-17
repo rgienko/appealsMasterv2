@@ -336,6 +336,17 @@ def charge_master_view(request):
 
     return render(request, 'app/charge_master.html', context)
 
+def issue_master_view(request):
+    context = initialize_context(request)
+    toke = get_token(request)
+
+    all_issues = issue_master.objects.all().order_by('issue_id')
+
+    context['all_issues'] = all_issues
+
+    return render(request, 'app/issue_master.html', context)
+
+
 # FOR REFERENCE #
 '''
 def make_dir(request):

@@ -43,7 +43,7 @@ class issue_master(models.Model):
     category_id = models.IntegerField()
     abbreviation = models.CharField(max_length=255, blank=True, null=True)
     short_description = models.TextField(max_length=1500,blank=True, null=True)
-    long_description = models.TextField(max_length=1500, blank=True, null=True)
+    long_description = models.TextField(max_length=4000, blank=True, null=True)
     is_groupable = models.BooleanField()
 
     def __str__(self):

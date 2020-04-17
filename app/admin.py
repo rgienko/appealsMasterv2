@@ -14,3 +14,5 @@ class action_master_damin(admin.ModelAdmin):
 @admin.register(appeal_master)
 class appeal_master_admin(admin.ModelAdmin):
     list_display = ('case_number', 'structure', 'appeal_name')
+
+admin.site.register(issue_master)

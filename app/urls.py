@@ -24,6 +24,7 @@ urlpatterns = [
     path('callback', views.callback, name='callback'),
     path(r'newAppeal/', views.new_appeal, name='new_appeal_master' ),
     path(r'charge-master/', views.charge_master_view, name='charge_master_url'),
+    path(r'issue-master/', views.issue_master_view, name='issue_master_url'),
     path(r'details/<pk>/', views.appeal_details, name='appeal_detail_url'),
     path(r'details/<pk>/$', views.delete_issue, name='delete_issue'),
     path(r'transfer/<pk>/', views.transfer_issue_view, name='transfer_issue_url'),
