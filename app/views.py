@@ -32,6 +32,13 @@ def initialize_context(request):
     return context
 
 
+
+def delete_issue(request, pk):
+    provider_master.objects.filter(pk=pk).delete()
+
+    return HttpResponseRedirect(reverse('home'))
+
+
 def home(request):
     context = initialize_context(request)
     due_next = critical_dates_master.objects.all().order_by('-critical_date')
@@ -252,6 +259,11 @@ def appeal_details(request, pk):
             return redirect(r'appeal_detail_url', case)
         else:
             add_issue_form = add_issue()
+
+    elif request.method == 'POST':
+        search_case = request.POST.get('search')
+
+        return redirect(r'appeal_detail_url', search_case)
 
 
     context['form'] = form
