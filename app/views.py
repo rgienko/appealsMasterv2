@@ -7,7 +7,7 @@ from app.graph_helper import get_user, get_calendar_events, create_event
 import dateutil.parser
 from app.forms import *
 from app.models import *
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 import os
 import random
 import datetime
@@ -325,6 +325,16 @@ def transfer_issue_view(request, pk):
 
     return render(request, 'app/transfer_issue.html', context)
 
+
+def charge_master_view(request):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    all_charge_codes = charge_master.objects.all()
+
+    context['all_charge_codes'] = all_charge_codes
+
+    return render(request, 'app/charge_master.html', context)
 
 # FOR REFERENCE #
 '''

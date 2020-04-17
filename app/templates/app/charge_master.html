@@ -1,0 +1,31 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Charge Master</h5>
+    <hr/>
+
+    <table class="table table-sm table-hover table-bordered">
+        <thead class="thead-light text-center">
+            <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Desciption</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+          {% for charge_code in all_charge_codes %}
+            <tr>
+                <td>{{ charge_code.charge_id }}</td>
+                <td>{{ charge_code.description}}</td>
+                <td class="p-0 m-0 text-center">
+                    <a class="btn btn-primary m-0" href=""><i class="far fa-edit"></i></i></a>
+                    <a class="btn btn-primary m-0" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
+                </td>
+            </tr>
+
+          {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}
