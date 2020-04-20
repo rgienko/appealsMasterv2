@@ -9,8 +9,6 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Issue</th>
-                <th scope="col">Category</th>
-                <th scope="col">Abbrevation</th>
                 <th scope="col">Short Description</th>
                 <th scope="col">Long Description</th>
                 <th scope="col">Actions</th>
@@ -20,13 +18,17 @@
             <tr>
                 <td>{{ issue.issue_id }}</td>
                 <td>{{ issue.issue}}</td>
-                <td>{{ issue.category_id }}</td>
-                <td>{{ issue.abbreviation}}</td>
-                <td>{{ issue.short_description }}</td>
-                <td>{{ issue.long_description }}</td>
+                <td style="width:350px;">{{ issue.short_description }}</td>
+                {% autoescape off %}
+                <td >
+                  <div class="overflow-auto" style="max-height:300px;">
+                    {{ issue.long_description }}</td>
+                  </div>
+                {% endautoescape %}
+
                 <td class="p-0 m-0 text-center">
-                    <a class="btn btn-primary m-0" href=""><i class="far fa-edit"></i></i></a>
-                    <a class="btn btn-primary m-0" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
+                    <a class="btn btn-primary mt-2" href=""><i class="fas fa-pen-square"></i></a>
+                    <a class="btn btn-primary mt-2" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
                 </td>
             </tr>
 

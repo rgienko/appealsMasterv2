@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from tinymce.models import HTMLField
 import uuid
 from datetime import date
 
@@ -34,20 +35,7 @@ class fi_master(models.Model):
     def __str__(self):
         return '{0}-{1}'.format(self.fi_abbr, self.fi_juris)
 
-class issue_master(models.Model):
-    issue_id = models.IntegerField(primary_key=True)
-    old_id = models.IntegerField(blank=True, null=True)
-    issue = models.CharField(max_length=255)
-    realization_weight = models.FloatField()
-    rep_id = models.IntegerField()
-    category_id = models.IntegerField()
-    abbreviation = models.CharField(max_length=255, blank=True, null=True)
-    short_description = models.TextField(max_length=1500,blank=True, null=True)
-    long_description = models.TextField(max_length=4000, blank=True, null=True)
-    is_groupable = models.BooleanField()
 
-    def __str__(self):
-        return '{0} - {1}'.format(str(self.issue_id), self.issue)
 
 class state_name_master(models.Model):
     state_id = models.CharField(primary_key=True, max_length=2)
@@ -122,7 +110,22 @@ class srg_staff_master(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return(str(self.sri_staff_id))
+        return('{0} - {1}'.format(str(self.sri_staff_id), self.employee))
+
+class issue_master(models.Model):
+    issue_id = models.IntegerField(primary_key=True)
+    old_id = models.IntegerField(blank=True, null=True)
+    issue = models.CharField(max_length=255)
+    realization_weight = models.FloatField()
+    rep_id = models.ForeignKey(srg_staff_master, on_delete=models.CASCADE)
+    category_id = models.IntegerField()
+    abbreviation = models.CharField(max_length=255, blank=True, null=True)
+    short_description = models.TextField(max_length=1500,blank=True, null=True)
+    long_description = HTMLField(max_length=4000, blank=True, null=True)
+    is_groupable = models.BooleanField()
+
+    def __str__(self):
+        return '{0} - {1}'.format(str(self.issue_id), self.issue)
 
 class status_master(models.Model):
     status_id = models.IntegerField(primary_key=True)
@@ -133,7 +136,7 @@ class status_master(models.Model):
         return '{0}-{1}'.format(str(self.status_id), self.status)
 
 class appeal_master(models.Model): # my person model related to example
-    case_number = models.CharField(primary_key=True, max_length=255)
+    case_number = models.CharField(primary_key=True, max_length=7)
     rep_id = models.ForeignKey(rep_master, on_delete=models.CASCADE,) # FK
     fi_id = models.ForeignKey(fi_master, on_delete=models.CASCADE)
     prrb_contact_id = models.ForeignKey(prrb_contacts, on_delete=models.CASCADE) # FK
@@ -151,6 +154,7 @@ class appeal_master(models.Model): # my person model related to example
     create_date = models.DateField(blank=True, null=True) # Date of Acknowledgement
     request_date = models.DateField(blank=True, null=True) # Submission Date
     acknowledged = models.BooleanField(blank=True, null=True, default=False) # will update the create_date
+    is_ffy = models.BooleanField(blank=True, null=True, default=False)
 
     def __str__(self):
         return(self.case_number)
