@@ -2,8 +2,15 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Issue Master</h5>
-    <hr/>
+  <div class="row mt-5 mb-0">
+    <div class="col-lg">
+        <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Issue Master</h5>
+    </div>
+    <div class="col-lg text-right mr-4">
+        <a class="" href="{% url 'new_issue_master_url' %}"><i class="far fa-plus-square" style="font-size:36px;"></i></a>
+    </div>
+  </div>
+    <hr class="mt-0"/>
     <table class="table table table-hover table-bordered">
         <thead class="thead-light text-center">
             <tr>
@@ -22,12 +29,12 @@
                 {% autoescape off %}
                 <td >
                   <div class="overflow-auto" style="max-height:300px;">
-                    {{ issue.long_description }}</td>
+                    {{ issue.long_description|linebreaks }}</td>
                   </div>
                 {% endautoescape %}
 
                 <td class="p-0 m-0 text-center">
-                    <a class="btn btn-primary mt-2" href=""><i class="fas fa-pen-square"></i></a>
+                    <a class="btn btn-primary mt-2" href="{% url 'new_issue_master_url' %}"><i class="fas fa-pen-square"></i></a>
                     <a class="btn btn-primary mt-2" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
                 </td>
             </tr>

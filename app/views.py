@@ -38,6 +38,25 @@ def delete_issue(request, pk):
 
     return HttpResponseRedirect(reverse('home'))
 
+def new_issue_master(request):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    form = new_issue_master_form(request.POST)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            new_issue = form.save(commit=False)
+            new_issue.save()
+
+            return redirect(r'issue_master_url')
+
+        else:
+            form = new_appeal_master_form(request.POST)
+
+    context['form'] = form
+
+    return render(request, 'app/new_issue_master.html', context)
 
 def home(request):
     context = initialize_context(request)

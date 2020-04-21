@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, Textarea, DateField, CheckboxInput, TextInput
 from .models import appeal_master, critical_dates_master, provider_master, issue_master, parent_master
-from tinymce.widgets import HTMLField
+from tinymce.widgets import TinyMCE
 
 class  make_dir_form(forms.Form):
     types = [
@@ -94,10 +94,6 @@ class new_issue_master_form(ModelForm):
             'long_description':_('Long Description')
         }
 
-        widgets = {
-            'short_description' : HTMLField(),
-            'long_description' : HTMLField()
-        }
 
 class acknowledge_case_form(forms.Form):
     acknowledged_date = forms.DateField()
