@@ -85,13 +85,20 @@ class new_appeal_master_form(ModelForm):
 class new_issue_master_form(ModelForm):
     class Meta:
         model = issue_master
-        fields = ['issue_id', 'issue', 'rep_id','abbreviation', 'short_description','long_description']
+        fields = ['issue_id', 'issue', 'rep_id','abbreviation','is_groupable', 'short_description','long_description']
         labels = {
             'issue_id':_('Issue ID:'),
             'rep_id':_('SRG Representative:'),
             'abbreviation':_('Issue abbreviation:'),
             'short_description':_('Short Description'),
             'long_description':_('Long Description')
+        }
+
+        widgets = {
+            'issue': TextInput(attrs={'size':'75'}),
+            'is_groupable': CheckboxInput(attrs={'class':'checkbox'}),
+            'short_description': Textarea(attrs={'cols':85, 'rows':5}),
+            'long_description': Textarea(attrs={'cols':85, 'rows':10})
         }
 
 
@@ -101,6 +108,26 @@ class acknowledge_case_form(forms.Form):
     def clean_acknowledged_date(self):
         data = self.cleaned_data['acknowledged_date']
         return data
+
+class edit_issue_form(ModelForm):
+    class Meta:
+        model = issue_master
+        fields = ['issue_id', 'issue', 'rep_id','abbreviation','is_groupable', 'short_description','long_description']
+        labels = {
+            'issue_id':_('Issue ID:'),
+            'rep_id':_('SRG Representative:'),
+            'abbreviation':_('Issue abbreviation:'),
+            'short_description':_('Short Description'),
+            'long_description':_('Long Description')
+        }
+
+        widgets = {
+            'issue': TextInput(attrs={'size':'75'}),
+            'is_groupable': CheckboxInput(attrs={'class':'checkbox'}),
+            'short_description': Textarea(attrs={'cols':85, 'rows':5}),
+            'long_description': Textarea(attrs={'cols':85, 'rows':10})
+        }
+
 
 class transfer_issue_form(forms.Form):
 

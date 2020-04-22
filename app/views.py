@@ -357,14 +357,22 @@ def charge_master_view(request):
 
 def issue_master_view(request):
     context = initialize_context(request)
-    toke = get_token(request)
+    token = get_token(request)
 
     all_issues = issue_master.objects.all().order_by('issue_id')
-
     context['all_issues'] = all_issues
 
     return render(request, 'app/issue_master.html', context)
 
+def issue_detail_view(request, pk):
+    content = initialize_context(request)
+    token = get_token(request)
+
+    issue = get_object_or_404(issue_master, pk=pk)
+
+    context['issue'] = issue
+
+    return render(request, 'app/issue_master_detail.html', context)
 
 # FOR REFERENCE #
 '''

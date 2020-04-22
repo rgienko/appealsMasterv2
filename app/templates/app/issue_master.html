@@ -17,30 +17,28 @@
                 <th scope="col">ID</th>
                 <th scope="col">Issue</th>
                 <th scope="col">Short Description</th>
-                <th scope="col">Long Description</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
           {% for issue in all_issues %}
             <tr>
-                <td>{{ issue.issue_id }}</td>
-                <td>{{ issue.issue}}</td>
-                <td style="width:350px;">{{ issue.short_description }}</td>
-                {% autoescape off %}
-                <td >
-                  <div class="overflow-auto" style="max-height:300px;">
-                    {{ issue.long_description|linebreaks }}</td>
-                  </div>
-                {% endautoescape %}
-
-                <td class="p-0 m-0 text-center">
-                    <a class="btn btn-primary mt-2" href="{% url 'new_issue_master_url' %}"><i class="fas fa-pen-square"></i></a>
+                <td class="pr-0  pl-0 m-0 text-center" style="width:10px;">{{ issue.issue_id }}</td>
+                <td style="width:200px;">{{ issue.issue}}</td>
+                <td style="width:400px;">
+                    <div class="overflow-auto" style="max-height:300px;">
+                      {{ issue.short_description }}
+                    </div>
+                </td>
+                <td class="p-0 m-0 text-center" style="width:100px;">
+                    <a class="btn btn-primary mt-2" href="{% url 'issue_detail_url' issue.id %}"><i class="fas fa-info-circle"></i></a>
                     <a class="btn btn-primary mt-2" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
                 </td>
             </tr>
 
           {% endfor %}
     </table>
+
+
 </div>
 
 

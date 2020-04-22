@@ -1,0 +1,107 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row mt-5 mb-0">
+    <div class="col-lg">
+        <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Issue Master</h5>
+    </div>
+    <div class="col-lg text-right mr-4">
+        <a class="" href="{% url 'new_issue_master_url' %}"><i class="far fa-plus-square" style="font-size:36px;"></i></a>
+    </div>
+  </div>
+    <hr class="mt-0"/>
+
+    <div class="card">
+        <div class="card-body">
+          <ul class="list-group">
+              <li class="list-group-item p-0 border-0">
+                  <ul class="list-group list-group-horizontal-sm">
+                      <li class="list-group-item w-25 font-weight-bold">Issue ID:</li>
+                      <li class="list-group-item w-75">{{ issue.issue_id }}</li>
+                  </ul>
+              </li>
+
+              <li class="list-group-item p-0 border-0">
+                  <ul class="list-group list-group-horizontal-sm">
+                      <li class="list-group-item w-25 font-weight-bold">Issue Name:</li>
+                      <li class="list-group-item w-75"> {{ issue.issue }}</li>
+                  </ul>
+              </li>
+
+              <li class="list-group-item p-0 border-0">
+                  <ul class="list-group list-group-horizontal-sm">
+                      <li class="list-group-item w-25 font-weight-bold">Representative:</li>
+                      <li class="list-group-item w-75"> {{issue.rep_id }}</li>
+                  </ul>
+              </li>
+
+              <li class="list-group-item p-0 border-0">
+                  <ul class="list-group list-group-horizontal-sm">
+                      <li class="list-group-item w-25 font-weight-bold">Abbreviation:</li>
+                      <li class="list-group-item w-75">{{ issue.abbreviation }}</li>
+                  </ul>
+              </li>
+
+              <li class="list-group-item p-0 border-0">
+                  <ul class="list-group list-group-horizontal-sm">
+                      <li class="list-group-item w-25 font-weight-bold">Short Description:</li>
+                      <li class="list-group-item w-75">{{ issue.short_description }}</li>
+                  </ul>
+              </li>
+
+              <li class="list-group-item p-0 border-0">
+                  <ul class="list-group list-group-horizontal-sm">
+                      <li class="list-group-item w-25 font-weight-bold">Long Description:</li>
+                      <li class="list-group-item w-75">{{ issue.long_description }}</li>
+                  </ul>
+              </li>
+          </ul>
+
+
+
+                    <a class="btn btn-primary mt-2" href=""><i class="fas fa-pen-square"></i></a>
+                    <a class="btn btn-primary mt-2" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
+
+        </div>
+    </div>
+
+    <div class="modal" id="edit_issue_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Acknowledge Case</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="" action="" method="post">
+                        {% csrf_token %}
+                        {% for hidden_field in edit_issue_form.hidden_fields %}
+                            {{ hidden_field }}
+                        {% endfor %}
+
+                        {% for field in edit_issue_form.visible_fields %}
+                            <div class="form-group">
+                              <ul class="list-group">
+                                  <li class="list-group-item p-0 border-0">
+                                      <ul class="list-group list-group-horizontal">
+                                          <li class="list-group-item w-50">{{ field.label_tag }}</li>
+                                          <li class="list-group-item">{{ field }}</li>
+                                      </ul>
+                                  </li>
+                              </ul>
+                            </div>
+                        {% endfor %}
+
+                    <input type="submit" name="save_issue" value="Submit" class="btn btn-primary"></input>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
