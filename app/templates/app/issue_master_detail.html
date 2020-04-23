@@ -17,52 +17,48 @@
           <ul class="list-group">
               <li class="list-group-item p-0 border-0">
                   <ul class="list-group list-group-horizontal-sm">
-                      <li class="list-group-item w-25 font-weight-bold">Issue ID:</li>
+                      <li class="list-group-item font-weight-bold" style = "width:180px;">Issue ID:</li>
                       <li class="list-group-item w-75">{{ issue.issue_id }}</li>
                   </ul>
               </li>
 
               <li class="list-group-item p-0 border-0">
                   <ul class="list-group list-group-horizontal-sm">
-                      <li class="list-group-item w-25 font-weight-bold">Issue Name:</li>
+                      <li class="list-group-item font-weight-bold" style = "width:180px;">Issue Name:</li>
                       <li class="list-group-item w-75"> {{ issue.issue }}</li>
                   </ul>
               </li>
 
               <li class="list-group-item p-0 border-0">
                   <ul class="list-group list-group-horizontal-sm">
-                      <li class="list-group-item w-25 font-weight-bold">Representative:</li>
+                      <li class="list-group-item font-weight-bold" style = "width:180px;">Representative:</li>
                       <li class="list-group-item w-75"> {{issue.rep_id }}</li>
                   </ul>
               </li>
 
               <li class="list-group-item p-0 border-0">
                   <ul class="list-group list-group-horizontal-sm">
-                      <li class="list-group-item w-25 font-weight-bold">Abbreviation:</li>
+                      <li class="list-group-item font-weight-bold" style = "width:180px;">Abbreviation:</li>
                       <li class="list-group-item w-75">{{ issue.abbreviation }}</li>
                   </ul>
               </li>
 
               <li class="list-group-item p-0 border-0">
                   <ul class="list-group list-group-horizontal-sm">
-                      <li class="list-group-item w-25 font-weight-bold">Short Description:</li>
+                      <li class="list-group-item font-weight-bold" style = "width:180px;">Short Description:</li>
                       <li class="list-group-item w-75">{{ issue.short_description }}</li>
                   </ul>
               </li>
 
               <li class="list-group-item p-0 border-0">
                   <ul class="list-group list-group-horizontal-sm">
-                      <li class="list-group-item w-25 font-weight-bold">Long Description:</li>
-                      <li class="list-group-item w-75">{{ issue.long_description }}</li>
+                      <li class="list-group-item font-weight-bold" style = "width:180px;">Long Description:</li>
+                      <li class="list-group-item w-75">{{ issue.long_description|linebreaks }}</li>
                   </ul>
               </li>
           </ul>
-
-
-
-                    <a class="btn btn-primary mt-2" href=""><i class="fas fa-pen-square"></i></a>
-                    <a class="btn btn-primary mt-2" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
-
+              <!--<a class="btn btn-primary mt-2" data-toggle="modal" href="#edit_issue_modal"><i class="fas fa-pen-square"></i></a>-->
+              <a class="btn btn-primary mt-2" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
         </div>
     </div>
 
@@ -78,11 +74,11 @@
                 <div class="modal-body">
                     <form class="" action="" method="post">
                         {% csrf_token %}
-                        {% for hidden_field in edit_issue_form.hidden_fields %}
+                        {% for hidden_field in edit_issue_frm.hidden_fields %}
                             {{ hidden_field }}
                         {% endfor %}
 
-                        {% for field in edit_issue_form.visible_fields %}
+                        {% for field in edit_issue_frm.visible_fields %}
                             <div class="form-group">
                               <ul class="list-group">
                                   <li class="list-group-item p-0 border-0">

@@ -190,7 +190,6 @@ def add_critical_due_dates(request, pk):
                 fy = prov.fiscal_year
 
             if case_information.structure == 'INDIVIDUAL':
-                p = prov[:1]
                 for prov in p:
                     pnum = prov.provider_number
                 o_sub = '{0}~{1}~FY{2}~({3})'.format(new_due_date.action_id, case, str(fy) ,pnum)
@@ -205,6 +204,7 @@ def add_critical_due_dates(request, pk):
             end = start_date + timedelta(minutes=30)
             location = 'N/A'
             is_all_day = False
+            reminder_minutes = action.lead_time * 10080 # 10,080 minutes per week and lead time is in weeks
 
             payload = {
                 "subject":subject,
@@ -219,7 +219,7 @@ def add_critical_due_dates(request, pk):
                     },
                 "location": {"displayName":location},
                 "isReminderOn": True,
-                "reminderMinutesBeforeStart":1024,
+                "reminderMinutesBeforeStart":reminder_minutes,
                 "isAllDay": is_all_day,
             }
             new_event = create_event(token, payload)
@@ -365,12 +365,29 @@ def issue_master_view(request):
     return render(request, 'app/issue_master.html', context)
 
 def issue_detail_view(request, pk):
-    content = initialize_context(request)
+    context = initialize_context(request)
     token = get_token(request)
 
     issue = get_object_or_404(issue_master, pk=pk)
+    edit_issue_frm = edit_issue_form(request.POST)
+
+    if request.method == 'POST':
+        if edit_issue_form.is_valid():
+            issue.issue_id = request.POST.get('issue_id')
+            issue.issue = request.POST.get('issue)')
+            issue.rep_id = request.POST.get('rep_id')
+            issue.abbreviation = request.POST.get('abbreviation')
+            issue.short_description = request.POST.get('long_description')
+
+            issue.save()
+
+            return redirect(r'issue_detail_url', pk)
+        else:
+            edit_issue_frm = edit_issue_form(request.POST)
+
 
     context['issue'] = issue
+    context['edit_issue_frm'] = edit_issue_frm
 
     return render(request, 'app/issue_master_detail.html', context)
 
