@@ -27,6 +27,7 @@ urlpatterns = [
     path(r'issue-master/', views.issue_master_view, name='issue_master_url'),
     path(r'issue-master/new/', views.new_issue_master, name='new_issue_master_url'),
     path(r'issue-master/detail/<pk>/', views.issue_detail_view, name='issue_detail_url'),
+    path(r'new-parent/', views.new_parent_view, name='new_parent_url'),
     path(r'details/<pk>/', views.appeal_details, name='appeal_detail_url'),
     path(r'details/<pk>/', views.delete_issue, name='delete_issue'),
     path(r'transfer/<pk>/', views.transfer_issue_view, name='transfer_issue_url'),

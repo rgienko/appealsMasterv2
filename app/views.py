@@ -31,7 +31,24 @@ def initialize_context(request):
     context['user'] = request.session.get('user', {'is_authenticated':False})
     return context
 
+def new_parent_view(request):
+    context = initialize_context(request)
+    token  = get_token(request)
 
+    form = add_parent_form(request.POST)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            new_parent = form.save(commit=False)
+            new_parent.save()
+
+            return redirect(r'home', context)
+        else:
+            form = add_parent_form(request.POST)
+
+    context['form'] = form
+
+    return render(request, 'app/new_parent.html', context)
 
 def delete_issue(request, pk):
     provider_master.objects.filter(pk=pk).delete()

@@ -109,6 +109,22 @@ class acknowledge_case_form(forms.Form):
         data = self.cleaned_data['acknowledged_date']
         return data
 
+class add_parent_form(ModelForm):
+    class Meta:
+        model = parent_master
+        fields = ['parent_id', 'parent_full_name', 'corp_contact_first_name', 'corp_contact_last_name', 'corp_contact_street', 'corp_contact_city', 'corp_contact_state_id', 'corp_contact_zip', 'corp_contact_phone', 'corp_contact_email']
+        labels = {
+            'parent_id': _('Parent ID:'),
+            'parent_full_name': _('Parent Full Name:'),
+            'corp_contact_first_name': _('First Name:'),
+            'corp_contact_last_name': _('Last Name:'),
+            'corp_contact_street': _('Street:'),
+            'corp_contact_city': _('City:'),
+            'corp_contact_state_id': _('State:'),
+            'corp_contact_zip': _('Zip Code:'),
+            'corp_contact_phone': _('Phone'),
+            'corp_contact_email': _('Email')
+        }
 class edit_issue_form(ModelForm):
     class Meta:
         model = issue_master
