@@ -1,0 +1,26 @@
+{% extends "app/layout.html" %}
+{% block content %}
+
+<div class="new-appeal">
+    <h4>Edit Parent</h4>
+    <form method="post">
+        {% csrf_token %}
+        {% for hidden_field in form.hidden_fields %}
+            {{ hidden_field }}
+        {% endfor %}
+
+        {% for field in form.visible_fields %}
+        <ul class="list-group p-0">
+            <li class="list-group-item p-0 border-0">
+                <ul class="list-group list-group-horizontal-sm p-0">
+                    <li class="list-group-item w-25 font-weight-bold">{{ field.label_tag }}</li>
+                    <li class="list-group-item w-75">{{ field }}</li>
+                </ul>
+            </li>
+        </ul>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary w-100" value="Save"/>
+    </form>
+</div>
+
+{% endblock %}

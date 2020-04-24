@@ -31,6 +31,32 @@ def initialize_context(request):
     context['user'] = request.session.get('user', {'is_authenticated':False})
     return context
 
+class parent_update_view(UpdateView):
+    # Specify the model
+    model = parent_master
+
+    #Specify the fields
+    fields = [
+            'parent_id',
+            'parent_full_name',
+            'corp_contact_first_name',
+            'corp_contact_last_name',
+            'corp_contact_street',
+            'corp_contact_city',
+            'corp_contact_state_id',
+            'corp_contact_zip',
+            'corp_contact_phone',
+            'corp_contact_email'
+        ]
+    template_name = 'app/parent_master_form.html'
+    pk_url_kwarg = 'parent_id'
+    context_object_name = 'parent'
+
+    def form_valid(self, form):
+        parent = form.save(commit=False)
+        parent.save()
+        return redirect('parent_master_url')
+
 def parent_master_view(request):
     context = initialize_context(request)
     token = get_token(request)
