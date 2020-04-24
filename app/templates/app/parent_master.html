@@ -1,0 +1,53 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<script type="text/javascript">
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+</script>
+<div class="container-fluid">
+  <div class="row mt-5 mb-0">
+    <div class="col-lg">
+        <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Parent Master</h5>
+    </div>
+    <div class="col-lg text-right mr-4">
+        <a class="" data-toggle="tooltip" data-placement="bottom" title="New Parent" href="{% url 'new_parent_url' %}"><i class="far fa-plus-square" style="font-size:36px;"></i></a>
+    </div>
+  </div>
+    <hr class="mt-0"/>
+    <div class="row">
+    {% for parent in all_parents %}
+        <div class="card w-25 m-5">
+            <div class="card-header">
+                  <h5>{{ parent.parent_full_name}}</td></h5>
+            </div>
+            <div class="card-body">
+                <p class="text-dark font-weight-bold text-uppercase mb-0">Contact</p>
+                <p>
+                    {{ parent.corp_contact_first_name }} {{ parent.corp_contact_last_name}} <br/>
+                    P: {{ parent.corp_contact_phone }} <br/>
+                    F: {{ parent.corp_contact_fax}} <br/>
+                    E: {{ parent.corp_contact_email}}
+                </p>
+
+                <p class="text-dark font-weight-bold text-uppercase mb-0">Address</p>
+                <address>
+                    {{ parent.corp_contact_street }} <br/>
+                    {{ parent.corp_contact_city }}, {{ parent.corp_contact_state_id }} {{ parent.corp_contact_zip }}
+                </address>
+            </div>
+            <div class="card-footer">
+                  <a class="card-link btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit Parent" href=""><i class="fas fa-pen-square"></i></a>
+                  <a class="card-link btn btn-danger" data-toggle="tooltip" data-placement="top" title="Delete Parent" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
+            </div>
+            </div>
+      {% endfor %}
+    </div>
+
+
+</div>
+
+
+{% endblock %}

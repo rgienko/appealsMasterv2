@@ -31,6 +31,16 @@ def initialize_context(request):
     context['user'] = request.session.get('user', {'is_authenticated':False})
     return context
 
+def parent_master_view(request):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    all_parents = parent_master.objects.all().order_by('parent_id')
+
+    context['all_parents'] = all_parents
+
+    return render(request, 'app/parent_master.html', context)
+
 def new_parent_view(request):
     context = initialize_context(request)
     token  = get_token(request)
