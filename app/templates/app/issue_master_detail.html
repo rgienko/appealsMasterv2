@@ -57,44 +57,8 @@
                   </ul>
               </li>
           </ul>
-              <!--<a class="btn btn-primary mt-2" data-toggle="modal" href="#edit_issue_modal"><i class="fas fa-pen-square"></i></a>-->
+              <a class="btn btn-primary mt-2" href="{% url 'update_issue_url' issue.issue_id %}"><i class="fas fa-pen-square"></i>
               <a class="btn btn-primary mt-2" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
-        </div>
-    </div>
-
-    <div class="modal" id="edit_issue_modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Acknowledge Case</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form class="" action="" method="post">
-                        {% csrf_token %}
-                        {% for hidden_field in edit_issue_frm.hidden_fields %}
-                            {{ hidden_field }}
-                        {% endfor %}
-
-                        {% for field in edit_issue_frm.visible_fields %}
-                            <div class="form-group">
-                              <ul class="list-group">
-                                  <li class="list-group-item p-0 border-0">
-                                      <ul class="list-group list-group-horizontal">
-                                          <li class="list-group-item w-50">{{ field.label_tag }}</li>
-                                          <li class="list-group-item">{{ field }}</li>
-                                      </ul>
-                                  </li>
-                              </ul>
-                            </div>
-                        {% endfor %}
-
-                    <input type="submit" name="save_issue" value="Submit" class="btn btn-primary"></input>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 </div>

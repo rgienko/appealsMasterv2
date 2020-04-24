@@ -125,25 +125,6 @@ class add_parent_form(ModelForm):
             'corp_contact_phone': _('Phone'),
             'corp_contact_email': _('Email')
         }
-class edit_issue_form(ModelForm):
-    class Meta:
-        model = issue_master
-        fields = ['issue_id', 'issue', 'rep_id','abbreviation','is_groupable', 'short_description','long_description']
-        labels = {
-            'issue_id':_('Issue ID:'),
-            'rep_id':_('SRG Representative:'),
-            'abbreviation':_('Issue abbreviation:'),
-            'short_description':_('Short Description'),
-            'long_description':_('Long Description')
-        }
-
-        widgets = {
-            'issue': TextInput(attrs={'size':'75'}),
-            'is_groupable': CheckboxInput(attrs={'class':'checkbox'}),
-            'short_description': Textarea(attrs={'cols':85, 'rows':5}),
-            'long_description': Textarea(attrs={'cols':85, 'rows':10})
-        }
-
 
 class transfer_issue_form(forms.Form):
 

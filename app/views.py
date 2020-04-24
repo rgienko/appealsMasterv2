@@ -78,13 +78,57 @@ def new_parent_view(request):
             new_parent = form.save(commit=False)
             new_parent.save()
 
-            return redirect(r'home', context)
+            return redirect(r'parent_master_url')
         else:
             form = add_parent_form(request.POST)
 
     context['form'] = form
 
     return render(request, 'app/new_parent.html', context)
+
+def issue_master_view(request):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    all_issues = issue_master.objects.all().order_by('issue_id')
+    context['all_issues'] = all_issues
+
+    return render(request, 'app/issue_master.html', context)
+
+def issue_detail_view(request, pk):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    issue = get_object_or_404(issue_master, pk=pk)
+
+    context['issue'] = issue
+
+    return render(request, 'app/issue_master_detail.html', context)
+
+class update_issue_view(UpdateView):
+    # Specify the model
+    model = issue_master
+
+    #Specify the fields
+    fields = [
+            'issue_id',
+            'old_id',
+            'issue',
+            'realization_weight',
+            'rep_id',
+            'abbreviation',
+            'short_description',
+            'long_description',
+            'is_groupable'
+        ]
+    template_name = 'app/issue_master_form.html'
+    pk_url_kwarg = 'issue_id'
+    context_object_name = 'issue'
+
+    def form_valid(self, form):
+        issue = form.save(commit=False)
+        issue.save()
+        return redirect(r'issue_detail_url', issue.issue_id)
 
 def delete_issue(request, pk):
     provider_master.objects.filter(pk=pk).delete()
@@ -408,41 +452,7 @@ def charge_master_view(request):
 
     return render(request, 'app/charge_master.html', context)
 
-def issue_master_view(request):
-    context = initialize_context(request)
-    token = get_token(request)
 
-    all_issues = issue_master.objects.all().order_by('issue_id')
-    context['all_issues'] = all_issues
-
-    return render(request, 'app/issue_master.html', context)
-
-def issue_detail_view(request, pk):
-    context = initialize_context(request)
-    token = get_token(request)
-
-    issue = get_object_or_404(issue_master, pk=pk)
-    edit_issue_frm = edit_issue_form(request.POST)
-
-    if request.method == 'POST':
-        if edit_issue_form.is_valid():
-            issue.issue_id = request.POST.get('issue_id')
-            issue.issue = request.POST.get('issue)')
-            issue.rep_id = request.POST.get('rep_id')
-            issue.abbreviation = request.POST.get('abbreviation')
-            issue.short_description = request.POST.get('long_description')
-
-            issue.save()
-
-            return redirect(r'issue_detail_url', pk)
-        else:
-            edit_issue_frm = edit_issue_form(request.POST)
-
-
-    context['issue'] = issue
-    context['edit_issue_frm'] = edit_issue_frm
-
-    return render(request, 'app/issue_master_detail.html', context)
 
 # FOR REFERENCE #
 '''

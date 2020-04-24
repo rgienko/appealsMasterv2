@@ -28,6 +28,7 @@ urlpatterns = [
     path(r'issue-master/', views.issue_master_view, name='issue_master_url'),
     path(r'issue-master/new/', views.new_issue_master, name='new_issue_master_url'),
     path(r'issue-master/detail/<pk>/', views.issue_detail_view, name='issue_detail_url'),
+    path(r'issue-master/detail/<issue_id>/edit/', views.update_issue_view.as_view(), name='update_issue_url'),
     path(r'parent-master/', views.parent_master_view, name='parent_master_url'),
     path(r'parent-master/new/', views.new_parent_view, name='new_parent_url'),
     path(r'parent-master/edit/<parent_id>/', views.parent_update_view.as_view(), name='edit_parent_url'),
