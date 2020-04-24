@@ -39,7 +39,15 @@ def provider_name_master_view(request):
 
     context['all_providers'] = all_providers
 
+    if request.GET.get('is_client') == 'Client':
+        all_providers = all_providers.filter(is_client__exact=True)
+        context['all_providers'] = all_providers
+
+        return render(request, 'app/provider_name_master.html', context)
+
+
     return render(request, 'app/provider_name_master.html', context)
+
 
 class new_provider_name_view(CreateView):
     model = prov_name_master

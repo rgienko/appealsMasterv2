@@ -2,11 +2,25 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="row mt-5 mb-0">
+    <div class="row mt-5">
         <div class="col-lg">
             <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Provider Name Master</h5>
         </div>
-        <div class="col-lg text-right mr-4">
+        <div class="col-lg text-right">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Filter
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <form method="get" action="">
+                    <input class="dropdown-item" type="submit" value="Client" name="is_client"/></input>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </form>
+                </div>
+            </div>
+          </div>
+          <div class="col-xs text-right mr-4">
             <a class="" data-toggle="tooltip" data-placement="bottom" title="New Provider" href="{% url 'new_provider_name_master_url' %}"><i class="far fa-plus-square" style="font-size:36px;"></i></a>
         </div>
     </div>
