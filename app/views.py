@@ -7,7 +7,7 @@ from app.graph_helper import get_user, get_calendar_events, create_event
 import dateutil.parser
 from app.forms import *
 from app.models import *
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, CreateView
 import os
 import random
 import datetime
@@ -40,6 +40,52 @@ def provider_name_master_view(request):
     context['all_providers'] = all_providers
 
     return render(request, 'app/provider_name_master.html', context)
+
+class new_provider_name_view(CreateView):
+    model = prov_name_master
+
+    fields = [
+        'provider_number',
+        'provider_name',
+        'fye',
+        'city',
+        'county',
+        'state_id',
+        'parent_id',
+        'fi_number',
+        'is_client'
+    ]
+    template_name = 'app/prov_name_master_create_form.html'
+    context_object_name = 'provider'
+
+    def form_valid(self, form):
+        provider = form.save(commit=False)
+        provider.save()
+        return redirect('provider_name_master_url')
+
+class provider_name_update_view(UpdateView):
+    model = prov_name_master
+
+    fields = [
+        'provider_number',
+        'provider_name',
+        'fye',
+        'city',
+        'county',
+        'state_id',
+        'parent_id',
+        'fi_number',
+        'is_client'
+    ]
+
+    template_name = 'app/prov_name_master_form.html'
+    pk_url_kwarg = 'provider_number'
+    context_object_name = 'provider'
+
+    def form_valid(self, form):
+        provider = form.save(commit=False)
+        provider.save()
+        return redirect('provider_name_master_url')
 
 class parent_update_view(UpdateView):
     # Specify the model

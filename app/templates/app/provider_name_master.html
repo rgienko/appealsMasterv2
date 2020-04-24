@@ -2,9 +2,15 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Provider Name Master</h5>
+    <div class="row mt-5 mb-0">
+        <div class="col-lg">
+            <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Provider Name Master</h5>
+        </div>
+        <div class="col-lg text-right mr-4">
+            <a class="" data-toggle="tooltip" data-placement="bottom" title="New Provider" href="{% url 'new_provider_name_master_url' %}"><i class="far fa-plus-square" style="font-size:36px;"></i></a>
+        </div>
+    </div>
     <hr/>
-
     <table class="table table-sm table-hover table-bordered">
         <thead class="thead-light text-center">
             <tr>
@@ -32,7 +38,7 @@
                 <td>{{ provider.fi_number}}</td>
                 <td>{{ provider.is_client}}</td>
                 <td class="p-0 m-0 text-center">
-                    <a class="btn btn-primary m-0" href=""><i class="far fa-edit"></i></i></a>
+                    <a class="btn btn-primary m-0" href="{% url 'provider_name_update_url' provider.provider_number %}"><i class="far fa-edit"></i></i></a>
                     <a class="btn btn-primary m-0" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
                 </td>
             </tr>
