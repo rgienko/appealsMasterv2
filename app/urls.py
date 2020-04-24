@@ -32,6 +32,7 @@ urlpatterns = [
     path(r'parent-master/', views.parent_master_view, name='parent_master_url'),
     path(r'parent-master/new/', views.new_parent_view, name='new_parent_url'),
     path(r'parent-master/edit/<parent_id>/', views.parent_update_view.as_view(), name='edit_parent_url'),
+    path(r'prov-name-master/', views.provider_name_master_view, name='provider_name_master_url'),
     path(r'details/<pk>/', views.appeal_details, name='appeal_detail_url'),
     path(r'details/<pk>/', views.delete_issue, name='delete_issue'),
     path(r'transfer/<pk>/', views.transfer_issue_view, name='transfer_issue_url'),

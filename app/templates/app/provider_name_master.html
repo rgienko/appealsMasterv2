@@ -1,0 +1,44 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Provider Name Master</h5>
+    <hr/>
+
+    <table class="table table-sm table-hover table-bordered">
+        <thead class="thead-light text-center">
+            <tr>
+                <th scope="col">Provider #</th>
+                <th scope="col">Provider Name</th>
+                <th scope="col">FYE</th>
+                <th scope="col">City</th>
+                <th scope="col">County</th>
+                <th scope="col">State</th>
+                <th scope="col">Parent</th>
+                <th scope="col">FI Number</th>
+                <th scope="col">Client</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+          {% for provider in all_providers %}
+            <tr>
+                <td>{{ provider.provider_number }}</td>
+                <td>{{ provider.provider_name|title }}</td>
+                <td>{{ provider.fye }}</td>
+                <td>{{ provider.city }}</td>
+                <td>{{ provider.county }}</td>
+                <td>{{ provider.state_id_id }}</td>
+                <td>{{ provider.parent_id_id }}</td>
+                <td>{{ provider.fi_number}}</td>
+                <td>{{ provider.is_client}}</td>
+                <td class="p-0 m-0 text-center">
+                    <a class="btn btn-primary m-0" href=""><i class="far fa-edit"></i></i></a>
+                    <a class="btn btn-primary m-0" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
+                </td>
+            </tr>
+          {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}

@@ -66,7 +66,7 @@ class prov_name_master(models.Model):
     fye = models.CharField(max_length=10, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
     county = models.CharField(max_length=255, blank=True, null=True)
-    state_id = models.ForeignKey(state_name_master, on_delete = models.CASCADE, verbose_name="State") # FK
+    state_id = models.ForeignKey(state_name_master, on_delete = models.CASCADE) # FK
     parent_id = models.ForeignKey(parent_master, on_delete=models.CASCADE) #FK
     fi_number = models.CharField(max_length=25, blank=True, null=True)
     is_client = models.BooleanField()
@@ -76,6 +76,9 @@ class prov_name_master(models.Model):
 
     def get_system_name(self):
         return (self.parent_id.parent_full_name)
+
+    def get_state_name(self):
+        return(self.state_id.state_name)
 
 class prrb_contacts(models.Model):
     prrb_contact_id = models.IntegerField(primary_key=True)

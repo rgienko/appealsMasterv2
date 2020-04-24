@@ -31,6 +31,16 @@ def initialize_context(request):
     context['user'] = request.session.get('user', {'is_authenticated':False})
     return context
 
+def provider_name_master_view(request):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    all_providers = prov_name_master.objects.all().order_by('provider_number')
+
+    context['all_providers'] = all_providers
+
+    return render(request, 'app/provider_name_master.html', context)
+
 class parent_update_view(UpdateView):
     # Specify the model
     model = parent_master
