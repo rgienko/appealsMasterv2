@@ -36,14 +36,22 @@ def provider_name_master_view(request):
     token = get_token(request)
 
     all_providers = prov_name_master.objects.all().order_by('provider_number')
+    all_systems = parent_master.objects.only('parent_id').order_by('parent_id')
 
     context['all_providers'] = all_providers
+    context['all_systems'] = all_systems
 
     if request.GET.get('is_client') == 'Client':
         all_providers = all_providers.filter(is_client__exact=True)
         context['all_providers'] = all_providers
-
         return render(request, 'app/provider_name_master.html', context)
+
+    elif request.GET.get('system_filter'):
+        sys = request.GET.get('system_filter')
+        all_providers = all_providers.filter(parent_id__exact = sys)
+        context['all_providers'] = all_providers
+        return render(request, 'app/provider_name_master.html', context)
+
 
 
     return render(request, 'app/provider_name_master.html', context)
@@ -63,6 +71,10 @@ class new_provider_name_view(CreateView):
         'fi_number',
         'is_client'
     ]
+
+    widgets = {
+        'provider_name': TextInput(attrs={'size': '75'}),
+    }
     template_name = 'app/prov_name_master_create_form.html'
     context_object_name = 'provider'
 

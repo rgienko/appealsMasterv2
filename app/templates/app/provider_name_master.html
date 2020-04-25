@@ -11,11 +11,13 @@
                 <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Filter
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-menu overflow-auto" style="max-height: 500px;" aria-labelledby="dropdownMenuButton">
                   <form method="get" action="">
                     <input class="dropdown-item" type="submit" value="Client" name="is_client"/></input>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <p class="text-dark font-weight-bold text-uppercase px-3 large mb-0">System</p>
+                    {% for system in all_systems %}
+                        <input class="dropdown-item" type="submit" value="{{ system.parent_id }}" name = "system_filter"></input>
+                    {% endfor %}
                   </form>
                 </div>
             </div>
@@ -28,29 +30,29 @@
     <table class="table table-sm table-hover table-bordered">
         <thead class="thead-light text-center">
             <tr>
-                <th scope="col">Provider #</th>
-                <th scope="col">Provider Name</th>
-                <th scope="col">FYE</th>
-                <th scope="col">City</th>
-                <th scope="col">County</th>
-                <th scope="col">State</th>
-                <th scope="col">Parent</th>
-                <th scope="col">FI Number</th>
-                <th scope="col">Client</th>
-                <th scope="col">Actions</th>
+                <th class="text-center" scope="col">Provider #</th>
+                <th class="text-center" scope="col">Provider Name</th>
+                <th class="text-center" scope="col">FYE</th>
+                <th class="text-center" scope="col">City</th>
+                <th class="text-center" scope="col">County</th>
+                <th class="text-center"scope="col">State</th>
+                <th class="text-center"scope="col">Parent</th>
+                <th class="text-center" scope="col">FI Number</th>
+                <th class="text-center" scope="col">Client</th>
+                <th class="text-center" scope="col">Actions</th>
             </tr>
         </thead>
           {% for provider in all_providers %}
             <tr>
-                <td>{{ provider.provider_number }}</td>
+                <td class="text-center" style="width:100px;">{{ provider.provider_number }}</td>
                 <td>{{ provider.provider_name|title }}</td>
-                <td>{{ provider.fye }}</td>
+                <td class="text-center" style="width:75px;">{{ provider.fye }}</td>
                 <td>{{ provider.city }}</td>
                 <td>{{ provider.county }}</td>
-                <td>{{ provider.state_id_id }}</td>
+                <td class="text-center" style="width:55px;">{{ provider.state_id_id }}</td>
                 <td>{{ provider.parent_id_id }}</td>
                 <td>{{ provider.fi_number}}</td>
-                <td>{{ provider.is_client}}</td>
+                <td class="text-center" style="width:70px;">{{ provider.is_client}}</td>
                 <td class="p-0 m-0 text-center">
                     <a class="btn btn-primary m-0" href="{% url 'provider_name_update_url' provider.provider_number %}"><i class="far fa-edit"></i></i></a>
                     <a class="btn btn-primary m-0" href=""><i class="far fa-trash-alt color-white text-light"></i></a>
