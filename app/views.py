@@ -42,7 +42,7 @@ def provider_name_master_view(request):
     context['all_systems'] = all_systems
 
     if request.GET.get('is_client') == 'Client':
-        all_providers = all_providers.filter(is_client__exact=True)
+        all_providers = all_providers.filter(is_client__exact=True).order_by('parent_id', 'provider_number')
         context['all_providers'] = all_providers
         return render(request, 'app/provider_name_master.html', context)
 
@@ -52,6 +52,10 @@ def provider_name_master_view(request):
         context['all_providers'] = all_providers
         return render(request, 'app/provider_name_master.html', context)
 
+    elif request.GET.get('clear_filter') == 'Clear Filter':
+        all_provider = prov_name_master.objects.all().order_by('provider_number')
+        context['all_providers'] = all_providers
+        return render(request, 'app/provider_name_master.html', context)
 
 
     return render(request, 'app/provider_name_master.html', context)

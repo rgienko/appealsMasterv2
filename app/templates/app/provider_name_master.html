@@ -7,24 +7,32 @@
             <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Provider Name Master</h5>
         </div>
         <div class="col-lg text-right">
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Filter
-                </button>
-                <div class="dropdown-menu overflow-auto" style="max-height: 500px;" aria-labelledby="dropdownMenuButton">
+            <div class="btn-group">
+                <div class="text-right mx-3">
                   <form method="get" action="">
-                    <input class="dropdown-item" type="submit" value="Client" name="is_client"/></input>
-                    <p class="text-dark font-weight-bold text-uppercase px-3 large mb-0">System</p>
-                    {% for system in all_systems %}
-                        <input class="dropdown-item" type="submit" value="{{ system.parent_id }}" name = "system_filter"></input>
-                    {% endfor %}
+                    <input class="btn btn-outline-primary" type="submit" value="Clear Filter" name="clear_filter"></input>
                   </form>
                 </div>
-            </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Filter
+                    </button>
+                    <div class="dropdown-menu overflow-auto" style="max-height: 500px;" aria-labelledby="dropdownMenuButton">
+                      <form method="get" action="">
+                        <p class="text-dark font-weight-bold text-uppercase px-3 large mb-0">Client</p>
+                        <input class="dropdown-item" type="submit" value="Client" name="is_client"/></input>
+                        <p class="text-dark font-weight-bold text-uppercase px-3 large mb-0">System</p>
+                        {% for system in all_systems %}
+                            <input class="dropdown-item" type="submit" value="{{ system.parent_id }}" name = "system_filter"></input>
+                        {% endfor %}
+                      </form>
+                    </div>
+                </div>
+              </div>
           </div>
-          <div class="col-xs text-right mr-4">
+          <div class="text-right mr-4">
             <a class="" data-toggle="tooltip" data-placement="bottom" title="New Provider" href="{% url 'new_provider_name_master_url' %}"><i class="far fa-plus-square" style="font-size:36px;"></i></a>
-        </div>
+          </div>
     </div>
     <hr/>
     <table class="table table-sm table-hover table-bordered">
@@ -35,8 +43,8 @@
                 <th class="text-center" scope="col">FYE</th>
                 <th class="text-center" scope="col">City</th>
                 <th class="text-center" scope="col">County</th>
-                <th class="text-center"scope="col">State</th>
-                <th class="text-center"scope="col">Parent</th>
+                <th class="text-center" scope="col">State</th>
+                <th class="text-center" scope="col">Parent</th>
                 <th class="text-center" scope="col">FI Number</th>
                 <th class="text-center" scope="col">Client</th>
                 <th class="text-center" scope="col">Actions</th>
