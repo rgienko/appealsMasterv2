@@ -25,7 +25,6 @@ class CalendarEventForm(forms.Form):
     is_all_day = forms.BooleanField(required = False)
 
 class add_issue(ModelForm):
-
     class Meta:
         model = provider_master
         fields = [
@@ -100,7 +99,6 @@ class new_issue_master_form(ModelForm):
             'short_description': Textarea(attrs={'cols':85, 'rows':5}),
             'long_description': Textarea(attrs={'cols':85, 'rows':10})
         }
-
 
 class acknowledge_case_form(forms.Form):
     acknowledged_date = forms.DateField()
