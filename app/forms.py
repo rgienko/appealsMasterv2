@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, Textarea, DateField, CheckboxInput, TextInput
 from .models import appeal_master, critical_dates_master, provider_master, issue_master, parent_master
 from tinymce.widgets import TinyMCE
+from django.db.models import Avg, Sum
 
 class  make_dir_form(forms.Form):
     types = [
@@ -138,3 +139,21 @@ class add_critical_due_dates_form(ModelForm):
     class Meta:
         model = critical_dates_master
         fields = ['critical_date', 'action_id']
+
+class calc_sa(forms.Form):
+    drg_weight = forms.FloatField()
+    drg_trans_fraction - forms.FloatField()
+    drg_ln_100 = forms.IntegerField()
+    drg_ln_101 = forms.IntegerField()
+    drg_ln_102 = forms.IntegerField()
+    drg_ln_103 = forms.IntegerField()
+    drg_ln_104 = forms.IntegerField()
+
+
+    @property
+    def perc_increase(self):
+        return (self.drg_weight / self.drg_trans_fraction)
+
+    @property
+    def total_drg(self):
+        return Sum(self.drg_ln_100, self.drg_ln_101, self.drg_ln_102, self.drg_ln_103, self.drg_ln_104)
