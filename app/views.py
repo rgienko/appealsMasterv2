@@ -241,7 +241,7 @@ def home(request):
     most_rec_cases = appeal_master.objects.all().order_by('-request_date')
     total_cases = appeal_master.objects.count()
     impact = provider_master.objects.filter(active_in_appeal_field__exact=True).aggregate(sum=Sum('amount'))
-    ''' total_impact = '{:20,.2f}'.format(impact['sum'])'''
+    total_impact = '{:20,.2f}'.format(impact['sum'])
 
     if request.method =='POST' and 'make_dir_button' not in request.POST:
         search_case = request.POST.get('search')
@@ -283,7 +283,7 @@ def home(request):
     context['due_next'] = due_next
     context['most_rec_cases'] = most_rec_cases
     context['total_cases'] = total_cases
-
+    context['total_impact'] = total_impact
 
     return render(request, 'app/index.html', context)
 
@@ -426,6 +426,7 @@ def appeal_details(request, pk):
     case = case_information.case_number
     case_due_dates = critical_dates_master.objects.filter(case_number__exact=case).order_by('-critical_date')
     case_issues = provider_master.objects.filter(case_number__exact=case).order_by('issue_id')
+    case_files = file_storage.objects.filter(case_number__exact=case)
     count = case_issues.count()
 
     if case_information.structure == 'INDIVIDUAL':
@@ -435,6 +436,7 @@ def appeal_details(request, pk):
 
     form = acknowledge_case_form(request.POST)
     add_issue_form = add_issue(request.POST)
+    upload_file_form = upload_case_file(request.POST)
 
     if request.method =='POST' and 'ackButton' in request.POST:
         if form.is_valid():
@@ -455,6 +457,13 @@ def appeal_details(request, pk):
             return redirect(r'appeal_detail_url', case)
         else:
             add_issue_form = add_issue()
+    elif request.method == 'POST' and 'upload_file_button' in request.POST:
+        if upload_file_form.is_valid():
+            new_file = upload_file_form.save(commit=False)
+            new_file.case_number = case
+            new_file.save()
+
+            return redirect(r'appeal_detail_url', case)
 
     elif request.method == 'POST':
         search_case = request.POST.get('search')
@@ -464,7 +473,9 @@ def appeal_details(request, pk):
 
     context['form'] = form
     context['add_issue_form'] = add_issue_form
+    context['upload_file_form'] = upload_file_form
     context['case_information'] = case_information
+    context['case_files'] = case_files
     context['case_due_dates'] = case_due_dates
     context['case_issues'] = case_issues
     context['provider_information'] = provider_information

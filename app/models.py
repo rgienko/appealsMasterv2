@@ -240,3 +240,20 @@ class critical_dates_master(models.Model):
 
     def get_response(self):
         return(self.action_id.type)
+
+class file_storage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    case_number = models.CharField(max_length=7)
+    file_type_choices = [
+        ('CONF', 'Appeal Submission Confirmation'),
+        ('ACK', 'Acknowledgement & Critical Due Dates'),
+        ('30', '30 Day Letter')
+        ]
+    file_type = models.CharField(max_length=10, choices = file_type_choices)
+    file = models.FileField(upload_to='case_files/')
+
+    def get_file_name(self):
+        return (self.file.name)
+
+    def get_file_url(self):
+        return (self.file.url)

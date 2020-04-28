@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, Textarea, DateField, CheckboxInput, TextInput
-from .models import appeal_master, critical_dates_master, provider_master, issue_master, parent_master
+from .models import appeal_master, critical_dates_master, provider_master, issue_master, parent_master, file_storage
 from tinymce.widgets import TinyMCE
 from django.db.models import Avg, Sum
 
@@ -139,3 +139,16 @@ class add_critical_due_dates_form(ModelForm):
     class Meta:
         model = critical_dates_master
         fields = ['critical_date', 'action_id']
+
+class upload_case_file(ModelForm):
+
+    class Meta:
+        model = file_storage
+        fields = [
+            'file_type',
+            'file'
+        ]
+        labels = {
+            'file_type': _('File Type:'),
+            'file': _('File:')
+        }

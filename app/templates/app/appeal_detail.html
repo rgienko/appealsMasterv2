@@ -73,53 +73,94 @@
                 </div>
             </div>
             <div class="col"> <!--Section is for the Provider Demo Information -->
-                <div class="p-2 shadow rounded">
-                    <h5 class="font-weight-bold text-uppercase pl-1">Provider Information</h5>
-                    <div class="card overflow-auto" style="min-height:182px; max-height:182px;">
-                        <table class="table table-sm">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" class="text-center">Provider Name</th>
-                                    <th scope="col" class="text-center">Parent</th>
-                                    <th scope="col" class="text-center">FYE</th>
-                                    <th scope="col" class="text-center">State
-                                </tr>
-                            </thead>
-                            <tbody>
-                              {% for provider in provider_information %}
-                                  <tr class="p-0">
-                                      <td class="p-1">{{ provider.get_provider_name|title }}</td>
-                                      <td class="text-center p-0">{{ provider.get_provider_parent_id|title }}</td>
-                                      <td class="text-center p-0">{{ provider.get_provider_fye }}</td>
-                                      <td class="text-center p-0">{{ provider.get_provider_state }}</td>
-                                  </tr>
-                              {% endfor %}
-                            </tbody>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active text-dark" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><h5 class="font-weight-bold text-uppercase pl-1">Provider Info</h5></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><h5 class="font-weight-bold text-uppercase pl-1">Due Dates</h5></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><h5 class="font-weight-bold text-uppercase pl-1">Case Files</h5></a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="p-2 shadow rounded"> <!--Provider Information-->
+                            <div class="card overflow-auto" style="min-height:182px; max-height:182px;">
+                                <table class="table table-bordered table-sm">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" class="text-center">Provider Name</th>
+                                            <th scope="col" class="text-center">Parent</th>
+                                            <th scope="col" class="text-center">FYE</th>
+                                            <th scope="col" class="text-center">State
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      {% for provider in provider_information %}
+                                          <tr class="p-0">
+                                              <td class="p-1">{{ provider.get_provider_name|title }}</td>
+                                              <td class="text-center pt-1">{{ provider.get_provider_parent_id|title }}</td>
+                                              <td class="text-center pt-1" style="width:100px;">{{ provider.get_provider_fye }}</td>
+                                              <td class="text-center pt-1" style="width:60px;">{{ provider.get_provider_state }}</td>
+                                          </tr>
+                                      {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class=" mt-3 p-2 shadow rounded" style=""> <!-- Critical Due Dates-->
+                            <div class="card overflow-auto" style="min-height:195px; max-height:195px;">
+                                <table class="table table-bordered table-sm table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Action</th>
+                                            <th scope="col">Critical Date</th>
+                                        </tr>
+                                    </thead>
+                                      {% for date in case_due_dates %}
+                                        <tr>
+                                            <td>{{ date.action_id }}</td>
+                                            <td>{{ date.critical_date|date:'N d, Y' }}</td>
+                                        </tr>
 
-                        </table>
+                                      {% endfor %}
+                                </table>
+                                <a class="btn btn-primary" href="{% url 'add_critical_due_dates_url' case_information.case_number %}"> Review / Add Critical Due Dates</a>
+                            </div>
+                        </div>
                     </div>
 
-                </div>
-                <div class=" mt-3 p-2 shadow rounded" style="">
-                    <h5 class="font-weight-bold text-uppercase pl-1">Critical Due Dates</h5>
-                    <div class="card overflow-auto" style="min-height:195px; max-height:195px;">
-                        <table class="table table-sm table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Action</th>
-                                    <th scope="col">Critical Date</th>
-                                </tr>
-                            </thead>
-                              {% for date in case_due_dates %}
-                                <tr>
-                                    <td>{{ date.action_id }}</td>
-                                    <td>{{ date.critical_date|date:'N d, Y' }}</td>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="mt-3 p-2 shadow rounded">
+                            <div class="card overflow-auto">
+                                <table class="table table-bordered table-sm table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">File Type</th>
+                                            <th scope="col">File Name</th>
+                                            <th scope="col">File Path</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for file in case_files %}
+                                    <tr>
+                                            <td>file.file_type</td>
+                                            <td>file.get_file_name</td>
+                                            <td>file.get_file_url</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                      <button class="btn btn-primary w-100" data-toggle="modal" data-target="#upload_file_modal">Upload Case File</button>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-                                </tr>
-
-                              {% endfor %}
-                        </table>
-                        <a class="btn btn-primary" href="{% url 'add_critical_due_dates_url' case_information.case_number %}"> Review / Add Critical Due Dates</a>
                     </div>
                 </div>
             </div>
@@ -184,6 +225,41 @@
         </div>
     </div>
     <!-- Code for the Modals -->
+    <div class="modal" id="upload_file_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Case File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body input-group date" id="datetimepicker1" data-target-input="nearest">
+                    <form class="" action="" method="post">
+                        {% csrf_token %}
+                        {% for hidden_field in upload_file_form.hidden_fields %}
+                            {{ hidden_field }}
+                        {% endfor %}
+
+                        {% for field in upload_file_form.visible_fields %}
+                            <div class="form-group">
+                              <ul class="list-group">
+                                  <li class="list-group-item p-0 border-0">
+                                      <ul class="list-group list-group-horizontal">
+                                          <li class="list-group-item w-50">{{ field.label_tag }}</li>
+                                          <li class="list-group-item">{{ field }}</li>
+                                      </ul>
+                                  </li>
+                              </ul>
+                            </div>
+                        {% endfor %}
+
+                    <input type="submit" name="upload_file_button" value="Submit" class="btn btn-primary"></input>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal" id="AckModel" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
