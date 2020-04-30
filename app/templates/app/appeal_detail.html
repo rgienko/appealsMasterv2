@@ -111,8 +111,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <div class=" mt-3 p-2 shadow rounded" style=""> <!-- Critical Due Dates-->
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"> <!-- Critical Due Dates-->
+                        <div class=" mt-3 p-2 shadow rounded" style="">
                             <div class="card overflow-auto" style="min-height:195px; max-height:195px;">
                                 <table class="table table-bordered table-sm table-hover">
                                     <thead class="thead-light">
@@ -140,27 +140,25 @@
                                 <table class="table table-bordered table-sm table-hover">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">File Type</th>
-                                            <th scope="col">File Name</th>
-                                            <th scope="col">File Path</th>
+                                            <th class="text-center" scope="col">File Type</th>
+                                            <th class="text-center" scope="col">File Name</th>
+                                            <th class="text-center" style="width:100xp" scope="col">File</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {% for file in case_files %}
                                     <tr>
-                                            <td>file.file_type</td>
-                                            <td>file.get_file_name</td>
-                                            <td>file.get_file_url</td>
+                                            <td class="pt-2">{{ file.get_file_type }}</td>
+                                            <td>{{ file.file.name }}</td>
+                                            <td class="text-center" style="color:white;font-size:24px;" ><a href="/media/{{ file.file }}" target="_blank"><i class="far fa-file-pdf"></i></a></td>
                                     </tr>
                                     {% endfor %}
-                                    <tr>
-                                      <button class="btn btn-primary w-100" data-toggle="modal" data-target="#upload_file_modal">Upload Case File</button>
-                                    </tr>
                                   </tbody>
-                                </table>
+                              </table>
+                              <button class="btn btn-primary w-100" data-toggle="modal" data-target="#upload_file_modal">Upload Case File</button>
+
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -234,8 +232,8 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body input-group date" id="datetimepicker1" data-target-input="nearest">
-                    <form class="" action="" method="post">
+                <div class="modal-body">
+                    <form class="" action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% for hidden_field in upload_file_form.hidden_fields %}
                             {{ hidden_field }}

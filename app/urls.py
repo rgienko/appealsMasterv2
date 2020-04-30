@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from app import views
 from .views import parent_update_view
 
@@ -39,5 +41,6 @@ urlpatterns = [
     path(r'details/<pk>/', views.delete_issue, name='delete_issue'),
     path(r'transfer/<pk>/', views.transfer_issue_view, name='transfer_issue_url'),
     path(r'details/<pk>/critical_due/', views.add_critical_due_dates, name='add_critical_due_dates_url'),
+    path(r'/media/', include(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))),
     path(r'calendar/', views.calendar, name='calendar'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
