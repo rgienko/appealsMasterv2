@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from app.auth_helper import get_sign_in_url, get_token_from_code, store_token, store_user, remove_user_and_token, get_token
 from app.graph_helper import get_user, get_calendar_events, create_event
 import dateutil.parser
 from app.forms import *
 from app.models import *
-from django.views.generic import TemplateView, UpdateView, CreateView
+from django.views.generic import TemplateView, UpdateView, CreateView, DeleteView
 import os
 import random
 import datetime
@@ -211,9 +211,18 @@ class update_issue_view(UpdateView):
         return redirect(r'issue_detail_url', issue.issue_id)
 
 def delete_issue(request, pk):
-    provider_master.objects.filter(pk=pk).delete()
+    context = initialize_context(request)
+    token = get_token(request)
 
-    return HttpResponseRedirect(reverse('home'))
+    obj = get_object_or_404(provider_master, pk=pk)
+    case = obj.case_number
+    if request.method == 'POST':
+        obj.delete()
+
+        return HttpResponseRedirect('/')
+
+    return render(request, 'app/provider_master_confirm_delete.html', context)
+
 
 def new_issue_master(request):
     context = initialize_context(request)

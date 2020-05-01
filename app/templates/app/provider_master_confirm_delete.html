@@ -1,0 +1,14 @@
+{% extends "app/layout.html" %}
+{% block content %}
+
+<div class="new-appeal">
+    <h4>Delete Issue for Appeal</h4>
+    <form method="post">
+        {% csrf_token %}
+        <p> Are you sure you want to delete to "{{ object }}"?</p>
+
+        <input type="submit" class="btn btn-primary w-100" value="Confirm" />
+    </form>
+</div>
+
+{% endblock %}

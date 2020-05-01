@@ -206,7 +206,7 @@
                                     <td class="text-center" style="width:100px;">{{ issue.from_field }}</td>
                                     <td class="p-0 m-0 text-center" style="width:100px;">
                                           <a class="btn btn-primary m-0" href="{% url 'transfer_issue_url' issue.pk %}"><i class="fas fa-exchange-alt"></i></a>
-                                          <a class="btn btn-primary m-0" href="{% url 'delete_issue' issue.id %}"><i class="far fa-trash-alt color-white text-light"></i></a>
+                                          <a class="btn btn-primary m-0" href="{% url 'delete_issue' issue.pk %}"><i class="far fa-trash-alt color-white text-light"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}
