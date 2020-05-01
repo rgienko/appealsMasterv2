@@ -17,6 +17,12 @@ class  make_dir_form(forms.Form):
     fy = forms.IntegerField()
     c_num = forms.CharField(max_length=7)
 
+
+class group_form_form(forms.Form):
+    fy = forms.ModelChoiceField(queryset=provider_master.objects.only('fiscal_year'))
+    parent = forms.ModelForm(queryset=parent_master.objects.only('parent_id'))
+    issue = forms.ModelChoiceField(queryset=issue_master.objects.only('issue_id'))
+
 class CalendarEventForm(forms.Form):
     subject = forms.CharField()
     content = forms.CharField()

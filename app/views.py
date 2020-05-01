@@ -553,6 +553,17 @@ def charge_master_view(request):
 
     return render(request, 'app/charge_master.html', context)
 
+def group_form_view(request):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    find_group_form = group_form_form(request.POST)
+
+    if request.method == 'POST':
+        if find_group_form.is_valid():
+            fy = request.POST.get('fy')
+            parent= request.POST.get('parent')
+            issue = request.POST.get('issue')
 
 
 # FOR REFERENCE #
