@@ -41,5 +41,6 @@ urlpatterns = [
     path(r'details/<pk>/delete', views.delete_issue, name='delete_issue'),
     path(r'transfer/<pk>/', views.transfer_issue_view, name='transfer_issue_url'),
     path(r'details/<pk>/critical_due/', views.add_critical_due_dates, name='add_critical_due_dates_url'),
+    path(r'groups/', views.find_group_view, name='find_group_url'),
     path(r'calendar/', views.calendar, name='calendar'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -31,6 +31,99 @@ def initialize_context(request):
     context['user'] = request.session.get('user', {'is_authenticated':False})
     return context
 
+def sign_in(request):
+    # Get the sign in url
+    sign_in_url, state = get_sign_in_url()
+    # Save the expected state so we can validate in the callback
+    request.session['auth_state'] = state
+    # Redirect to the Azure sign-in page
+    return HttpResponseRedirect(sign_in_url)
+
+def callback(request):
+    # Get the state saved in the session
+    expected_state = request.session.pop('auth_state', '')
+    # Make the token request
+    token = get_token_from_code(request.get_full_path(), expected_state)
+
+    # Get the user's profile
+    user = get_user(token)
+
+    # Save the token and user
+    store_token(request, token)
+    store_user(request, user)
+
+    return HttpResponseRedirect(reverse('home'))
+
+def sign_out(request):
+    # Clear out the user and the token
+    remove_user_and_token(request)
+
+    return HttpResponseRedirect(reverse('home'))
+
+def home(request):
+    context = initialize_context(request)
+    due_next = critical_dates_master.objects.all().order_by('-critical_date')
+    most_rec_cases = appeal_master.objects.all().order_by('-request_date')
+    total_cases = appeal_master.objects.count()
+    impact = provider_master.objects.filter(active_in_appeal_field__exact=True).aggregate(sum=Sum('amount'))
+    ''' total_impact = '{:20,.2f}'.format(impact['sum']) '''
+
+    if request.method =='POST' and 'make_dir_button' not in request.POST:
+        search_case = request.POST.get('search')
+
+        return redirect(r'appeal_detail_url', search_case)
+
+
+    new_dir_form = make_dir_form(request.POST)
+    if request.method == 'POST' and 'make_dir_button' in request.POST:
+        if new_dir_form.is_valid():
+            type = request.POST.get('type')
+            parent = request.POST.get('parent')
+            p_num = request.POST.get('p_num')
+            issue = request.POST.get('issue')
+            fy = request.POST.get('fy')
+            c_num = request.POST.get('c_num')
+
+            if type == 'INDIVIDUAL':
+                # Goal: S:\3-AP\1-DOCS\INDIVIDUAL\IND~01-0001~2016~XX-XXXX
+                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}'.format(type, parent, p_num, fy, c_num)
+            else:
+                # Goal: S:\3-AP\1-DOCS\GROUP\IND~CN-XXXX~2016~1~SSI ERR
+                issue_abb = issue_master.objects.get(pk=issue)
+                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}~{5}'.format(type, parent,fy,c_num,issue, issue_abb.abbreviation)
+
+            try:
+                os.mkdir(new_path)
+                # Sucess Message
+                messages.success(request, 'Directory created successfully!')
+                new_dir_form = make_dir_form()
+            except:
+                # Directory Already Exists
+                messages.error(request, 'Directory already exsists, please correct and try again.')
+
+        else:
+            new_dir_form = make_dir_form()
+
+    context['new_dir_form'] = new_dir_form
+    context['due_next'] = due_next
+    context['most_rec_cases'] = most_rec_cases
+    context['total_cases'] = total_cases
+    ''' context['total_impact'] = total_impact '''
+
+    return render(request, 'app/index.html', context)
+
+def find_group_view(request):
+    context = initialize_context(request)
+    token = get_token(request)
+
+    form = group_form_form(request.POST)
+
+    to_groups = appeal_master.objects.exclude(structure__exact='Individual')
+
+    context['form'] = form
+    context['to_groups'] = to_groups
+    return render(request, 'app/group_formation.html', context)
+
 def provider_name_master_view(request):
     context = initialize_context(request)
     token = get_token(request)
@@ -59,7 +152,6 @@ def provider_name_master_view(request):
 
 
     return render(request, 'app/provider_name_master.html', context)
-
 
 class new_provider_name_view(CreateView):
     model = prov_name_master
@@ -223,7 +315,6 @@ def delete_issue(request, pk):
 
     return render(request, 'app/provider_master_confirm_delete.html', context)
 
-
 def new_issue_master(request):
     context = initialize_context(request)
     token = get_token(request)
@@ -243,87 +334,6 @@ def new_issue_master(request):
     context['form'] = form
 
     return render(request, 'app/new_issue_master.html', context)
-
-def home(request):
-    context = initialize_context(request)
-    due_next = critical_dates_master.objects.all().order_by('-critical_date')
-    most_rec_cases = appeal_master.objects.all().order_by('-request_date')
-    total_cases = appeal_master.objects.count()
-    impact = provider_master.objects.filter(active_in_appeal_field__exact=True).aggregate(sum=Sum('amount'))
-    ''' total_impact = '{:20,.2f}'.format(impact['sum']) '''
-
-    if request.method =='POST' and 'make_dir_button' not in request.POST:
-        search_case = request.POST.get('search')
-
-        return redirect(r'appeal_detail_url', search_case)
-
-
-    new_dir_form = make_dir_form(request.POST)
-    if request.method == 'POST' and 'make_dir_button' in request.POST:
-        if new_dir_form.is_valid():
-            type = request.POST.get('type')
-            parent = request.POST.get('parent')
-            p_num = request.POST.get('p_num')
-            issue = request.POST.get('issue')
-            fy = request.POST.get('fy')
-            c_num = request.POST.get('c_num')
-
-            if type == 'INDIVIDUAL':
-                # Goal: S:\3-AP\1-DOCS\INDIVIDUAL\IND~01-0001~2016~XX-XXXX
-                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}'.format(type, parent, p_num, fy, c_num)
-            else:
-                # Goal: S:\3-AP\1-DOCS\GROUP\IND~CN-XXXX~2016~1~SSI ERR
-                issue_abb = issue_master.objects.get(pk=issue)
-                new_path = 'S:\\3-AP\\1-DOCS\\{0}\{1}~{2}~{3}~{4}~{5}'.format(type, parent,fy,c_num,issue, issue_abb.abbreviation)
-
-            try:
-                os.mkdir(new_path)
-                # Sucess Message
-                messages.success(request, 'Directory created successfully!')
-                new_dir_form = make_dir_form()
-            except:
-                # Directory Already Exists
-                messages.error(request, 'Directory already exsists, please correct and try again.')
-
-        else:
-            new_dir_form = make_dir_form()
-
-    context['new_dir_form'] = new_dir_form
-    context['due_next'] = due_next
-    context['most_rec_cases'] = most_rec_cases
-    context['total_cases'] = total_cases
-    ''' context['total_impact'] = total_impact '''
-
-    return render(request, 'app/index.html', context)
-
-def sign_in(request):
-    # Get the sign in url
-    sign_in_url, state = get_sign_in_url()
-    # Save the expected state so we can validate in the callback
-    request.session['auth_state'] = state
-    # Redirect to the Azure sign-in page
-    return HttpResponseRedirect(sign_in_url)
-
-def callback(request):
-    # Get the state saved in the session
-    expected_state = request.session.pop('auth_state', '')
-    # Make the token request
-    token = get_token_from_code(request.get_full_path(), expected_state)
-
-    # Get the user's profile
-    user = get_user(token)
-
-    # Save the token and user
-    store_token(request, token)
-    store_user(request, user)
-
-    return HttpResponseRedirect(reverse('home'))
-
-def sign_out(request):
-    # Clear out the user and the token
-    remove_user_and_token(request)
-
-    return HttpResponseRedirect(reverse('home'))
 
 def calendar(request):
     context = initialize_context(request)
@@ -425,7 +435,6 @@ def add_critical_due_dates(request, pk):
         'app/review_case_critical_due_dates.html',
         context
         )
-
 
 def appeal_details(request, pk):
     context = initialize_context(request)

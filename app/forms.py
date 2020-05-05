@@ -4,6 +4,7 @@ from django.forms import ModelForm, Textarea, DateField, CheckboxInput, TextInpu
 from .models import appeal_master, critical_dates_master, provider_master, issue_master, parent_master, file_storage
 from tinymce.widgets import TinyMCE
 from django.db.models import Avg, Sum
+from datetime import datetime
 
 class  make_dir_form(forms.Form):
     types = [
@@ -19,8 +20,9 @@ class  make_dir_form(forms.Form):
 
 
 class group_form_form(forms.Form):
+
     fy = forms.ModelChoiceField(queryset=provider_master.objects.only('fiscal_year'))
-    parent = forms.ModelForm(queryset=parent_master.objects.only('parent_id'))
+    parent = forms.ModelChoiceField(queryset=parent_master.objects.only('parent_id'))
     issue = forms.ModelChoiceField(queryset=issue_master.objects.only('issue_id'))
 
 class CalendarEventForm(forms.Form):

@@ -8,11 +8,11 @@
               <form class="" action="" method="post">
                   {% csrf_token %}
 
-                  {% for hidden_field in due_form.hidden_fields %}
+                  {% for hidden_field in form.hidden_fields %}
                       {{ hidden_field }}
                   {% endfor %}
 
-                  {% for field in due_form.visible_fields %}
+                  {% for field in form.visible_fields %}
                       <div class="form-group">
                         <ul class="list-group">
                             <li class="list-group-item p-0 border-0">
@@ -33,17 +33,17 @@
 
       <h5 class="font-weight-bold text-uppercase pl-1 mt-5">Review Current Critical Due Dates</h5>
 
-      {% for date in case_due_dates %}
+      {% for group in to_groups %}
       <div class="card mt-3">
           <div class="card-header">
-              <span class="font-weight-bold">{{ date.get_response}}:</span>  {{ date.get_action_note }} ({{ date.action_id }})
+              <span class="font-weight-bold">{{ group.case_number}}:</span>  {{ group.appeal_name }}
           </div>
           <div class="card-body">
-            {{ date.get_action_details }}
           </div>
+
           <ul class="list-group list-group-flush">
               <li class="list-group-item"></li>
-              <li class="list-group-item font-weight-bold">Critical Due Date: {{ date.critical_date|date:'N d, Y' }}</li>
+              <li class="list-group-item font-weight-bold"></li>
           </ul>
         </div>
         <hr>
